@@ -46,29 +46,48 @@
 								variant="outline"
 								role="combobox"
 								type="button"
-								class={cn('w-[200px] justify-between', !value && 'text-muted-foreground')}
+								class={cn(
+									'min-w-[200px] max-w-full justify-between',
+									!value && 'text-muted-foreground'
+								)}
 							>
-								{categories.find((f) => f.value === value)?.label ?? 'Select equipment type'}
+								{value
+									? value
+											.split(',')
+											.map((v) => categories.find((f) => f.value === v)?.label)
+											.join(', ')
+									: 'Select equipment type'}
 								<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 							</Button>
 						</Form.Control>
 					</Popover.Trigger>
-					<Popover.Content class="w-[200px] p-0">
+					<Popover.Content class="min-w-[200px] w-auto p-0">
 						<Command.Root>
-							<Command.Input autofocus placeholder="Search language..." />
+							<Command.Input autofocus placeholder="Search equipment types..." />
 							<Command.Empty>No equipment found.</Command.Empty>
 							<Command.Group>
 								{#each categories as equipment}
 									<Command.Item
 										value={equipment.value}
 										onSelect={() => {
-											console.log('on select firing');
-											setValue(equipment.value);
+											let selectedValues = value ? value.split(',') : [];
+											const index = selectedValues.indexOf(equipment.value);
+											if (index === -1) {
+												// Add to selected if not already selected
+												selectedValues.push(equipment.value);
+											} else {
+												// Remove from selected if already selected
+												selectedValues = selectedValues.filter((v) => v !== equipment.value);
+											}
+											setValue(selectedValues.join(','));
 											closeAndFocusTrigger(ids.trigger);
 										}}
 									>
 										<Check
-											class={cn('mr-2 h-4 w-4', equipment.value !== value && 'text-transparent')}
+											class={cn(
+												'mr-2 h-4 w-4',
+												!(value && value.split(',').includes(equipment.value)) && 'text-transparent'
+											)}
 										/>
 										{equipment.label}
 									</Command.Item>

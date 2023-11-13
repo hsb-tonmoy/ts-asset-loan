@@ -12,22 +12,27 @@
 	$: console.log(form);
 </script>
 
-<main class="flex justify-center items-center w-full h-screen bg-[#C1C5D7] dark:bg-[#09090B]">
+<main
+	class="flex justify-center items-center w-full h-full xl:h-screen bg-[#C1C5D7] dark:bg-[#09090B]"
+>
 	<div
 		style="box-shadow: 0 4px 16px 4px rgba(0, 0, 0, 0.3)"
-		class="md:max-w-3xl lg:max-w-4xl xl:max-w-screen-2xl w-full p-0 flex h-[55rem] max-h-fit rounded-3 border-0 bg-white dark:bg-[#18181B]"
+		class="md:max-w-3xl lg:max-w-4xl xl:max-w-screen-2xl w-full p-0 flex flex-col xl:flex-row h-full xl:max-h-[45rem] rounded-3 border-0 bg-white dark:bg-[#18181B]"
 	>
-		<div id="menu" class="flex flex-col items-center w-[10%] py-12">
+		<div id="menu" class="order-2 xl:order-1 flex flex-col items-center w-full xl:w-[10%] py-12">
 			<Menu />
 		</div>
 		<div
 			id="description"
 			style="box-shadow: 0 4px 16px 4px rgba(0, 0, 0, 0.3)"
-			class="flex flex-col justify-center items-center w-[40%] bg-[#3B82F6] dark:bg-[#2e5ba3] -my-6"
+			class="order-1 xl:order-2 flex flex-col justify-center items-center w-full xl:w-[40%] py-6 xl:py-0 bg-[#3B82F6] dark:bg-[#2e5ba3] xl:-my-6"
 		>
 			<Description />
 		</div>
-		<div id="requestForm" class="flex flex-col justify-center items-center w-[50%]">
+		<div
+			id="requestForm"
+			class="order-3 flex flex-col items-center w-full xl:w-[50%] xl:overflow-auto px-10 py-10"
+		>
 			<Form form={data.form} />
 		</div>
 	</div>

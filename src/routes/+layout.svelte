@@ -3,5 +3,9 @@
 	import '../app.postcss';
 </script>
 
+<svelte:head>
+	<title>KPL Asset Management</title>
+</svelte:head>
+
 <ModeWatcher />
 <slot />
