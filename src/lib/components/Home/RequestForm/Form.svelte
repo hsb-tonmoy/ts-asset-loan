@@ -158,7 +158,7 @@
 		<Form.Field {config} name="notes">
 			<Form.Item>
 				<Form.Label>Notes</Form.Label>
-				<Form.Textarea placeholder="Add any notes....." />
+				<Form.Textarea placeholder="Add any notes....." rows={6} />
 				<Form.Validation />
 			</Form.Item>
 		</Form.Field>

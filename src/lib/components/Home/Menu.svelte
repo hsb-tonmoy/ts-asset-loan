@@ -23,16 +23,16 @@
 <div class="flex flex-col w-full">
 	<div class="flex flex-col items-center w-full mb-20">
 		<img src="/logo.svg" alt="KPL" class="w-2/4" />
-		<span class="font-semibold text-sm text-center text-[#b0b0b0] mt-2"
+		<span class="font-semibold text-sm text-center text-[#b0b0b0] dark:text-white mt-2"
 			>Kalamazoo Public Library</span
 		>
 	</div>
 	<ul class="flex flex-col w-full gap-16">
 		{#each menuItems as menuItem}
 			<li
-				class="flex justify-center shrink border-0 hover:border-l-[6px] border-amber-600 transition-all duration-150 ease-in-out"
+				class="flex justify-center shrink border-0 text-[#b0b0b0] hover:text-black hover:dark:text-white hover:border-l-[6px] border-amber-600 transition-all duration-150 ease-in-out"
 			>
-				<a href={menuItem.link} class="inline-flex flex-col items-center gap-1 text-[#b0b0b0]">
+				<a href={menuItem.link} class="inline-flex flex-col items-center gap-1">
 					<ActivitySquare />
 					<span class="text-sm tracking-wide text-center">{menuItem.name}</span>
 				</a>
