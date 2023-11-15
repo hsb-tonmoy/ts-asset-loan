@@ -16,7 +16,7 @@
 	>
 		<HeaderMenu />
 	</header>
-	<main class="relative ml-[200px] mt-16 p-4">
+	<main class="relative ml-[200px] mt-16 p-4 w-full">
 		<slot />
 	</main>
 </div>

@@ -34,7 +34,7 @@
 		{
 			name: 'Statues',
 			icon: ClipboardEdit,
-			link: '/admin'
+			link: '/admin/settings/status/add'
 		},
 		{
 			name: 'Settings',
