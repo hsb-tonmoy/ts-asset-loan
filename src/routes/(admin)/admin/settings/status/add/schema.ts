@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const formSchema = z.object({
 	name: z.string().min(2, { message: 'Name must be at least 2 characters long' }),
-	statusColor: z.string().min(2, { message: 'Status color must be at least 2 characters long' }),
+	statusColor: z.string(),
 	description: z
 		.string()
 		.min(2, { message: 'Description must be at least 2 characters long' })

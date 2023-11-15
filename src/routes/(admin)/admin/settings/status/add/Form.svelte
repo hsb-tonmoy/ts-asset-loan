@@ -1,9 +1,15 @@
 <script lang="ts">
+	import ColorPicker from 'svelte-awesome-color-picker';
+	import { getForm } from 'formsnap';
 	import * as Form from '$lib/components/ui/form';
 	import { formSchema, type FormSchema } from './schema';
 	import type { SuperValidated } from 'sveltekit-superforms';
 
 	export let form: SuperValidated<FormSchema>;
+
+	let hex: string = '';
+
+	$: console.log(form.data.name);
 </script>
 
 <Form.Root
@@ -21,10 +27,11 @@
 		</Form.Item>
 	</Form.Field>
 
-	<Form.Field {config} name="statusColor">
+	<Form.Field {config} name="statusColor" let:setValue>
 		<Form.Item>
 			<Form.Label>Status Color</Form.Label>
-			<Form.Input class="w-auto min-w-[300px] border-gray-300 h-10" />
+			<ColorPicker bind:hex />
+			<!-- <Form.Input class="w-auto min-w-[300px] border-gray-300 h-10" /> -->
 			<Form.Validation />
 		</Form.Item>
 	</Form.Field>

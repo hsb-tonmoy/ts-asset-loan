@@ -6,6 +6,8 @@
 
 	export let data: PageData;
 	export let form: SuperValidated<FormSchema>;
+
+	$: console.log(form);
 </script>
 
 <div class="flex gap-6 p-4">
