@@ -16,6 +16,10 @@ model User {
 
   auth_session Session[]
   key          Key[]
+  requestsMade     Request[] @relation("requestsMade")
+  requestsAssigned Request[] @relation("requestsAssigned")
+  requestsApproved Request[] @relation("requestsApproved")
+
 }
 
 model Session {
@@ -35,4 +39,43 @@ model Key {
   user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id])
+}
+
+model Request {
+  id             Int     @id @default(autoincrement()) @unique
+  user_id        Int?
+  user           User?   @relation(fields: [user_id], references: [id], name: "requestsMade")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt @default(now())
+  status_id      Int
+  status         RequestStatus @relation(fields: [status_id], references: [id])
+  equipment_id   Int
+  equipmentCategory      EquipmentCategory @relation(fields: [equipment_id], references: [id])
+  firstName     String
+  lastName      String
+  email         String
+  phone         String
+  requestDateTime   DateTime
+  returnDateTime    DateTime
+  notes        String?
+  assigned_to_user_id   Int
+  assigned_to_user      User   @relation(fields: [assigned_to_user_id], references: [id], name: "requestsAssigned")
+  approved_by_user_id   Int
+  approved_by_user      User   @relation(fields: [approved_by_user_id], references: [id], name: "requestsApproved")
+
+}
+
+model EquipmentCategory {
+  id          Int     @id @default(autoincrement()) @unique
+  name        String  @unique
+  description String?
+  requests   Request[]
+}
+
+model RequestStatus {
+  id          Int     @id @default(autoincrement()) @unique
+  name        String  @unique
+  statusColor String? @default("rgb(235, 64, 52)")
+  description String?
+  requests   Request[]
 }
