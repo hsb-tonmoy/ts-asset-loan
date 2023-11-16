@@ -1,20 +1,20 @@
 <script lang="ts">
-	import * as Form from '$lib/components/ui/form';
-	import { formSchema, type FormSchema } from './schema';
-	import type { SuperValidated } from 'sveltekit-superforms';
-
+	import { Label } from '$lib/components/ui/label';
+	import { Input } from '$lib/components/ui/input';
+	import { Textarea } from '$lib/components/ui/textarea';
+	import { Button } from '$lib/components/ui/button';
+	import { formSchema } from './schema';
+	import { superForm } from 'sveltekit-superforms/client';
 	import AutoComplete from '$lib/components/ui/autocomplete/AutoComplete.svelte';
+	import type { PageData } from '../../../../routes/(root)/$types';
 
-	export let form: SuperValidated<FormSchema>;
+	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
-	let selectedCategoryObjects: { label: string; value: string }[] = [
-		{
-			label: '',
-			value: ''
-		}
-	];
+	export let data: PageData;
 
-	$: console.log(selectedCategoryObjects);
+	const { form, errors, enhance } = superForm(data.form, {
+		validators: formSchema
+	});
 
 	const categories = [
 		{ label: 'Laptop', value: 'laptop' },
@@ -28,119 +28,128 @@
 	];
 </script>
 
-<Form.Root
-	method="POST"
-	{form}
-	schema={formSchema}
-	let:config
-	class="grid grid-cols-6 gap-6 dark:text-white"
->
-	<div class="col-span-6">
-		<Form.Field {config} name="category" let:setValue let:value>
-			<Form.Item class="flex flex-col">
-				<Form.Label>Type of Equipment</Form.Label>
-				<AutoComplete
-					items={categories}
-					bind:selectedItem={selectedCategoryObjects}
-					labelFieldName="label"
-					multiple
-					onChange={() => {
-						setValue(selectedCategoryObjects.join(', '));
-					}}
-					noInputStyles={false}
-				/>
-				<Form.Description>Choose the type of equipment you would like to request.</Form.Description>
-				<Form.Validation />
-			</Form.Item>
-		</Form.Field>
+<form method="POST" use:enhance class="grid grid-cols-6 gap-4 text-gray-800">
+	<div class="w-full col-span-6">
+		<SuperDebug data={$form} />
 	</div>
-	<div class="col-span-3">
-		<Form.Field {config} name="firstName">
-			<Form.Item>
-				<Form.Label>First Name</Form.Label>
-				<Form.Input />
-				<Form.Validation />
-			</Form.Item>
-		</Form.Field>
-	</div>
-	<div class="col-span-3">
-		<Form.Field {config} name="lastName">
-			<Form.Item>
-				<Form.Label>Last Name</Form.Label>
-				<Form.Input />
-				<Form.Validation />
-			</Form.Item>
-		</Form.Field>
-	</div>
-	<div class="col-span-3">
-		<Form.Field {config} name="email">
-			<Form.Item>
-				<Form.Label>Email</Form.Label>
-				<Form.Input type="email" />
-				<Form.Validation />
-			</Form.Item>
-		</Form.Field>
-	</div>
-	<div class="col-span-3">
-		<Form.Field {config} name="phone">
-			<Form.Item>
-				<Form.Label>Phone</Form.Label>
-				<Form.Input />
-				<Form.Validation />
-			</Form.Item>
-		</Form.Field>
-	</div>
-	<div class="col-span-3">
-		<Form.Field {config} name="requestDate">
-			<Form.Item>
-				<Form.Label>Request Date</Form.Label>
-				<Form.Input type="date" />
-				<Form.Validation />
-			</Form.Item>
-		</Form.Field>
-	</div>
-	<div class="col-span-3">
-		<Form.Field {config} name="requestTime">
-			<Form.Item>
-				<Form.Label>Request Time</Form.Label>
-				<Form.Input type="time" />
-				<Form.Validation />
-			</Form.Item>
-		</Form.Field>
-	</div>
-	<div class="col-span-3">
-		<Form.Field {config} name="returnDate">
-			<Form.Item>
-				<Form.Label>Return Date</Form.Label>
-				<Form.Input type="date" />
-				<Form.Validation />
-			</Form.Item>
-		</Form.Field>
-	</div>
-	<div class="col-span-3">
-		<Form.Field {config} name="returnTime">
-			<Form.Item>
-				<Form.Label>Return Time</Form.Label>
-				<Form.Input type="time" />
-				<Form.Validation />
-			</Form.Item>
-		</Form.Field>
-	</div>
-	<div class="col-span-6">
-		<Form.Field {config} name="notes">
-			<Form.Item>
-				<Form.Label>Notes</Form.Label>
-				<Form.Textarea placeholder="Add any notes....." rows={6} />
-				<Form.Validation />
-			</Form.Item>
-		</Form.Field>
+	<div class="flex flex-col gap-4 col-span-6">
+		<Label for="category" class="block">Type of Equipment</Label>
+		<AutoComplete
+			name="category"
+			id="category"
+			multiple
+			items={categories}
+			bind:value={$form.category}
+			valueFieldName="value"
+			labelFieldName="label"
+			showClear={true}
+			className="w-full"
+		/>
+
+		{#if $errors.category}
+			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.category}</span>
+		{/if}
 	</div>
 
-	<Form.Button>Submit</Form.Button>
-</Form.Root>
+	<div class="flex flex-col gap-4 col-span-3">
+		<Label for="firstName">First Name</Label>
+		<Input type="text" name="firstName" id="firstName" bind:value={$form.firstName} />
+		{#if $errors.firstName}
+			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.firstName}</span
+			>
+		{/if}
+	</div>
+
+	<div class="flex flex-col gap-4 col-span-3">
+		<Label for="lastName">Last Name</Label>
+		<Input type="text" name="lastName" id="lastName" bind:value={$form.lastName} />
+		{#if $errors.lastName}
+			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.lastName}</span>
+		{/if}
+	</div>
+
+	<div class="flex flex-col gap-4 col-span-3">
+		<Label for="email">Email</Label>
+		<Input type="email" name="email" id="email" bind:value={$form.email} />
+		{#if $errors.email}
+			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.email}</span>
+		{/if}
+	</div>
+
+	<div class="flex flex-col gap-4 col-span-3">
+		<Label for="phone">Phone</Label>
+		<Input type="tel" name="phone" id="phone" bind:value={$form.phone} />
+		{#if $errors.phone}
+			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.phone}</span>
+		{/if}
+	</div>
+
+	<div class="flex flex-col gap-4 col-span-3">
+		<Label for="requestDate">Request Date</Label>
+		<Input type="date" name="requestDate" id="requestDate" bind:value={$form.requestDate} />
+		{#if $errors.requestDate}
+			<span class="text-sm font-medium text-destructive dark:text-red-600"
+				>{$errors.requestDate}</span
+			>
+		{/if}
+	</div>
+
+	<div class="flex flex-col gap-4 col-span-3">
+		<Label for="requestTime">Request Time</Label>
+		<Input type="time" name="requestTime" id="requestTime" bind:value={$form.requestTime} />
+		{#if $errors.requestTime}
+			<span class="text-sm font-medium text-destructive dark:text-red-600"
+				>{$errors.requestTime}</span
+			>
+		{/if}
+	</div>
+
+	<div class="flex flex-col gap-4 col-span-3">
+		<Label for="returnDate">Return Date</Label>
+		<Input type="date" name="returnDate" id="returnDate" bind:value={$form.returnDate} />
+		{#if $errors.returnDate}
+			<span class="text-sm font-medium text-destructive dark:text-red-600"
+				>{$errors.returnDate}</span
+			>
+		{/if}
+	</div>
+
+	<div class="flex flex-col gap-4 col-span-3">
+		<Label for="returnTime">Return Time</Label>
+		<Input
+			type="time"
+			name="returnTime"
+			id="returnTime"
+			bind:value={$form.returnTime}
+			class="w-auto min-w-[300px]"
+		/>
+		{#if $errors.returnTime}
+			<span class="text-sm font-medium text-destructive dark:text-red-600"
+				>{$errors.returnTime}</span
+			>
+		{/if}
+	</div>
+
+	<div class="flex flex-col gap-4 col-span-6">
+		<Label for="notes" class="">Notes</Label>
+		<Textarea
+			name="notes"
+			id="notes"
+			bind:value={$form.notes}
+			placeholder="Add any notes..."
+			rows={6}
+			class="w-full"
+		/>
+		{#if $errors.notes}
+			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.notes}</span>
+		{/if}
+	</div>
+
+	<Button type="submit" class="self-start">Submit</Button>
+</form>
 
 <style lang="postcss">
-	.label-text {
-		@apply text-sm;
+	.label-class {
+		@apply text-[#fafafa] mb-4;
 	}
 </style>

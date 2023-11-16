@@ -1,5 +1,6 @@
 import type { Actions, PageServerLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms/server';
+
 import { formSchema } from './schema';
 import { fail } from '@sveltejs/kit';
 
@@ -12,7 +13,7 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	default: async (event) => {
 		const form = await superValidate(event, formSchema);
-		console.log(form);
+		console.log(form.data);
 		if (!form.valid) {
 			return fail(400, {
 				form

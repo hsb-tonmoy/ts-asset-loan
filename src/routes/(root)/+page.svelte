@@ -3,13 +3,8 @@
 	import Description from './../../lib/components/Home/Description.svelte';
 	import Menu from '$lib/components/Home/Menu.svelte';
 	import type { PageData } from './$types';
-	import type { SuperValidated } from 'formsnap';
-	import type { FormSchema } from '$lib/components/Home/RequestForm/schema';
 
 	export let data: PageData;
-	export let form: SuperValidated<FormSchema>;
-
-	$: console.log(form);
 </script>
 
 <main
@@ -33,7 +28,7 @@
 			id="requestForm"
 			class="order-3 flex flex-col items-center w-full xl:w-[50%] xl:overflow-auto px-10 py-10"
 		>
-			<Form form={data.form} />
+			<Form {data} />
 		</div>
 	</div>
 </main>

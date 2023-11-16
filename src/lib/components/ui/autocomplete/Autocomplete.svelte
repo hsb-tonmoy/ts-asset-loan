@@ -1287,7 +1287,7 @@
 
 <style lang="postcss">
 	.autocomplete {
-		@apply min-w-[200px] inline-block max-w-full relative align-top border border-input ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 rounded-md;
+		@apply min-w-[200px] inline-block max-w-full relative align-top border border-input ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 rounded-md dark:text-white;
 	}
 
 	.autocomplete.show-clear:not(.hide-arrow)::after {
@@ -1313,7 +1313,7 @@
 	}
 
 	.autocomplete-list {
-		@apply absolute w-full overflow-y-auto z-50 py-4 px-0 border border-input bg-[#09090b];
+		@apply absolute w-full overflow-y-auto z-50 py-4 px-0 border border-input bg-white dark:bg-[#09090b];
 		max-height: calc(15 * (1rem + 10px) + 15px);
 		user-select: none;
 		top: 48px !important;
@@ -1322,16 +1322,16 @@
 		@apply p-0;
 	}
 	.autocomplete-list-item {
-		@apply dark:text-white text-sm px-4 py-1.5 cursor-pointer rounded-sm;
+		@apply text-black dark:text-white text-sm px-4 py-1.5 cursor-pointer rounded-sm;
 	}
 
 	.autocomplete-list-item.confirmed {
-		color: #fff;
+		@apply text-blue-500;
 	}
 
 	.autocomplete-list-item.selected {
 		color: #fff;
-		@apply bg-[#27272A];
+		@apply bg-gray-400 dark:bg-[#27272A];
 	}
 	.autocomplete-list-item-no-results {
 		padding: 5px 15px;

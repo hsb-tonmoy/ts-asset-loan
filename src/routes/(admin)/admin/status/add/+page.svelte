@@ -1,13 +1,8 @@
 <script lang="ts">
-	import type { SuperValidated } from 'formsnap';
-	import type { FormSchema } from './schema';
 	import Form from './Form.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-	export let form: SuperValidated<FormSchema>;
-
-	$: console.log(form);
 </script>
 
 <div class="flex gap-6">
@@ -18,6 +13,6 @@
 		</div>
 	</div>
 	<div class="bg-white dark:bg-[#18181C] w-9/12 p-4">
-		<Form form={data.form} />
+		<Form {data} />
 	</div>
 </div>
