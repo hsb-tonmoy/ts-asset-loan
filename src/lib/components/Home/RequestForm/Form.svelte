@@ -3,9 +3,18 @@
 	import { formSchema, type FormSchema } from './schema';
 	import type { SuperValidated } from 'sveltekit-superforms';
 
-	import Autocomplete from '$lib/components/ui/autocomplete/Autocomplete.svelte';
+	import AutoComplete from '$lib/components/ui/autocomplete/AutoComplete.svelte';
 
 	export let form: SuperValidated<FormSchema>;
+
+	let selectedCategoryObjects: { label: string; value: string }[] = [
+		{
+			label: '',
+			value: ''
+		}
+	];
+
+	$: console.log(selectedCategoryObjects);
 
 	const categories = [
 		{ label: 'Laptop', value: 'laptop' },
@@ -19,18 +28,26 @@
 	];
 </script>
 
-<Form.Root method="POST" {form} schema={formSchema} let:config class="grid grid-cols-6 gap-6">
+<Form.Root
+	method="POST"
+	{form}
+	schema={formSchema}
+	let:config
+	class="grid grid-cols-6 gap-6 dark:text-white"
+>
 	<div class="col-span-6">
 		<Form.Field {config} name="category" let:setValue let:value>
 			<Form.Item class="flex flex-col">
 				<Form.Label>Type of Equipment</Form.Label>
-				<Autocomplete
-					{value}
-					{setValue}
-					data={categories}
-					multiple={true}
-					inputPlaceholder="Select an equipment type"
-					searchPlaceholder="Search for an equipment....."
+				<AutoComplete
+					items={categories}
+					bind:selectedItem={selectedCategoryObjects}
+					labelFieldName="label"
+					multiple
+					onChange={() => {
+						setValue(selectedCategoryObjects.join(', '));
+					}}
+					noInputStyles={false}
 				/>
 				<Form.Description>Choose the type of equipment you would like to request.</Form.Description>
 				<Form.Validation />
@@ -121,3 +138,9 @@
 
 	<Form.Button>Submit</Form.Button>
 </Form.Root>
+
+<style lang="postcss">
+	.label-text {
+		@apply text-sm;
+	}
+</style>

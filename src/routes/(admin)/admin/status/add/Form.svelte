@@ -2,15 +2,13 @@
 	import * as Form from '$lib/components/ui/form';
 	import { formSchema, type FormSchema } from './schema';
 	import type { SuperValidated } from 'sveltekit-superforms';
-	import AutoComplete from 'simple-svelte-autocomplete';
+	import AutoComplete from '$lib/components/ui/autocomplete/AutoComplete.svelte';
 
 	import colors from '$lib/components/colors.json';
 
-	let selectedColorObject: { label: string; value: string };
+	let selectedColorObject;
 
 	export let form: SuperValidated<FormSchema>;
-
-	$: console.log(selectedColorObject);
 </script>
 
 <Form.Root
@@ -30,14 +28,15 @@
 
 	<Form.Field {config} name="statusColor" let:setValue let:value>
 		<Form.Item>
-			<Form.Label>Status Color</Form.Label>
+			<Form.Label class="block">Status Color</Form.Label>
 			<AutoComplete
 				items={colors}
 				bind:selectedItem={selectedColorObject}
 				labelFieldName="label"
-				multiple={true}
-				noInputStyles={true}
-				keywordsFunction={(color) => color.label + ' ' + color.value}
+				showClear={true}
+				onChange={() => {
+					setValue(selectedColorObject);
+				}}
 			/>
 			<Form.Validation />
 		</Form.Item>

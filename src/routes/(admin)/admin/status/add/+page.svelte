@@ -10,14 +10,14 @@
 	$: console.log(form);
 </script>
 
-<div class="flex gap-6 p-4">
-	<div class="bg-white p-4 w-3/12">
-		<div class="bg-[#F0FAFF] text-blue-500 p-2">
+<div class="flex gap-6">
+	<div class="bg-white dark:bg-[#18181C] py-4 w-3/12">
+		<div class="bg-[#F0FAFF] text-blue-500 py-2 px-4">
 			<h6 class="text-base">Status Settings</h6>
 			<span class="text-sm">Add a new status</span>
 		</div>
 	</div>
-	<div class="bg-white w-9/12 p-4">
+	<div class="bg-white dark:bg-[#18181C] w-9/12 p-4">
 		<Form form={data.form} />
 	</div>
 </div>
