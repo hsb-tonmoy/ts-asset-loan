@@ -8,12 +8,11 @@
 	import AutoComplete from '$lib/components/ui/autocomplete/AutoComplete.svelte';
 	import type { PageData } from '../../../../routes/(root)/$types';
 
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
-
 	export let data: PageData;
 
 	const { form, errors, enhance } = superForm(data.form, {
-		validators: formSchema
+		validators: formSchema,
+		dataType: 'json'
 	});
 
 	const categories = [
@@ -29,9 +28,6 @@
 </script>
 
 <form method="POST" use:enhance class="grid grid-cols-6 gap-4 text-gray-800">
-	<div class="w-full col-span-6">
-		<SuperDebug data={$form} />
-	</div>
 	<div class="flex flex-col gap-4 col-span-6">
 		<Label for="category" class="block">Type of Equipment</Label>
 		<AutoComplete
