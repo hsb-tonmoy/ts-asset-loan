@@ -1,42 +1,10 @@
 <script lang="ts">
-	import {
-		Home,
-		Menu,
-		Gauge,
-		User,
-		ClipboardList,
-		MonitorSmartphone,
-		ClipboardEdit,
-		Cog,
-		BadgeHelp
-	} from 'lucide-svelte';
+	import { Home, Menu, Cog, BadgeHelp } from 'lucide-svelte';
+	import DarkModeSwitcher from '$lib/DarkModeSwitcher.svelte';
+
+	import UserMenu from './UserMenu.svelte';
 
 	const menuItems = [
-		{
-			name: 'Dashboard',
-			icon: Gauge,
-			link: '/admin'
-		},
-		{
-			name: 'Users',
-			icon: User,
-			link: '/admin'
-		},
-		{
-			name: 'Requests',
-			icon: ClipboardList,
-			link: '/admin'
-		},
-		{
-			name: 'Categories',
-			icon: MonitorSmartphone,
-			link: '/admin'
-		},
-		{
-			name: 'Statues',
-			icon: ClipboardEdit,
-			link: '/admin'
-		},
 		{
 			name: 'Settings',
 			icon: Cog,
@@ -63,6 +31,8 @@
 		</div>
 	</div>
 	<div class="flex items-center gap-6">
+		<DarkModeSwitcher />
+		<UserMenu />
 		{#each menuItems as item}
 			<svelte:component this={item.icon} class="w-5 h-5" />
 		{/each}

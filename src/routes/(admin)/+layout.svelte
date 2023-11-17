@@ -1,5 +1,5 @@
 <script lang="ts">
-	import HeaderMenu from '$lib/components/Admin/HeaderMenu.svelte';
+	import Header from '$lib/components/Admin/Header/Header.svelte';
 	import SidebarMenu from '$lib/components/Admin/SidebarMenu.svelte';
 </script>
 
@@ -14,7 +14,7 @@
 		class="fixed top-0 left-0 w-full h-16 bg-white dark:bg-[#18181C] z-10"
 		style="box-shadow: 0 1px 4px #00152914;"
 	>
-		<HeaderMenu />
+		<Header />
 	</header>
 	<main class="relative ml-[200px] mt-16 p-4 w-full">
 		<slot />

@@ -2,5 +2,7 @@
 	import DarkModeSwitcher from '$lib/DarkModeSwitcher.svelte';
 </script>
 
-<DarkModeSwitcher />
+<div class="absolute top-5 right-5">
+	<DarkModeSwitcher />
+</div>
 <slot />

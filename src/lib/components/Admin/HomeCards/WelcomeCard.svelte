@@ -1,5 +1,4 @@
 <script lang="ts">
-	import * as Avatar from '$lib/components/ui/avatar';
 	export let name: string;
 	export let number_of_requests: number = 10;
 	export let number_of_pending_requests: number = 5;

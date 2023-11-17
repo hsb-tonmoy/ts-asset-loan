@@ -1,44 +1,79 @@
 <script lang="ts">
-	import { readable } from 'svelte/store';
-	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
-	import { addHiddenColumns } from 'svelte-headless-table/plugins';
-	import { Plus, Trash2 } from 'lucide-svelte';
+	import { writable } from 'svelte/store';
+	import { Plus, Trash2, MoveUp, MoveDown } from 'lucide-svelte';
+	import {
+		createSvelteTable,
+		flexRender,
+		getCoreRowModel,
+		getSortedRowModel
+	} from '@tanstack/svelte-table';
+	import type { TableOptions, ColumnDef } from '@tanstack/svelte-table';
 	import type { RequestStatus } from '@prisma/client';
-	import * as Table from '$lib/components/ui/table';
+
 	import Label from '$lib/components/ui/label/label.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 
-	import ColorRender from './ColorRender.svelte';
+	export let data: RequestStatus[];
 
-	export let data: RequestStatus[] = [];
+	const defaultColumns: ColumnDef<RequestStatus>[] = [
+		{
+			accessorKey: 'id',
+			header: 'ID',
+			cell: (info) => info.getValue()
+		},
+		{
+			accessorKey: 'name',
+			header: 'Name',
+			cell: (info) => info.getValue()
+		},
+		{
+			accessorKey: 'statusColor',
+			header: 'Status Color',
+			cell: (info) => info.getValue()
+		}
+	];
 
-	const table = createTable(readable(data), {
-		hide: addHiddenColumns()
+	let sorting = [];
+
+	const setSorting = (updater) => {
+		if (updater instanceof Function) {
+			sorting = updater(sorting);
+		} else {
+			sorting = updater;
+		}
+		options.update((old) => ({
+			...old,
+			state: {
+				...old.state,
+				sorting
+			}
+		}));
+	};
+
+	const options = writable<TableOptions<RequestStatus>>({
+		data,
+		columns: defaultColumns,
+		onSortingChange: setSorting,
+		getCoreRowModel: getCoreRowModel(),
+		getSortedRowModel: getSortedRowModel(),
+		initialState: {
+			columnVisibility: {
+				id: true,
+				name: true,
+				statusColor: false
+			}
+		}
 	});
 
-	const columns = table.createColumns([
-		table.column({
-			accessor: 'id',
-			header: 'ID'
-		}),
-		table.column({
-			accessor: 'statusColor',
-			header: 'Color',
-			plugins: {
-				hide: true
-			}
-		}),
-		table.column({
-			accessor: 'name',
-			header: 'Name',
-			cell: ({ value, row }) => {
-				return createRender(ColorRender, { color: row.cells[1].value, name: value });
-			}
-		})
-	]);
+	const rerender = () => {
+		options.update((options) => ({
+			...options,
+			data
+		}));
+	};
 
-	const { headerRows, pageRows, tableAttrs, tableBodyAttrs } = table.createViewModel(columns);
+	const table = createSvelteTable(options);
 </script>
 
 <div class="flex flex-col bg-white dark:bg-[#18181C] box-border p-4">
@@ -72,36 +107,58 @@
 			<Trash2 class="w-5 h-5" />
 		</div>
 	</div>
-	<Table.Root {...$tableAttrs} class="border border-input">
-		<Table.Header class="bg-[#FAFAFC] dark:bg-[#26262A]">
-			{#each $headerRows as headerRow}
-				<Subscribe rowAttrs={headerRow.attrs()}>
-					<Table.Row>
-						{#each headerRow.cells as cell (cell.id)}
-							<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()}>
-								<Table.Head {...attrs}>
-									<Render of={cell.render()} />
-								</Table.Head>
-							</Subscribe>
-						{/each}
-					</Table.Row>
-				</Subscribe>
+
+	<table class="w-full whitespace-no-wrap border border-input text-sm">
+		<thead class="border-b bg-[#FAFAFC] dark:bg-[#26262A]">
+			{#each $table.getHeaderGroups() as headerGroup}
+				<tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+					{#each headerGroup.headers as header}
+						<th
+							colSpan={header.colSpan}
+							class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0"
+							>{#if !header.isPlaceholder}
+								<button
+									class="inline-flex items-center gap-2"
+									class:cursor-pointer={header.column.getCanSort()}
+									class:select-none={header.column.getCanSort()}
+									on:click={header.column.getToggleSortingHandler()}
+								>
+									<svelte:component
+										this={flexRender(header.column.columnDef.header, header.getContext())}
+									/>
+									{#if header.column.getIsSorted() === 'asc'}
+										<MoveUp class="w-4 h-4" />
+									{:else if header.column.getIsSorted() === 'desc'}
+										<MoveDown class="w-4 h-4" />
+									{/if}
+								</button>
+							{/if}</th
+						>
+					{/each}
+				</tr>
 			{/each}
-		</Table.Header>
-		<Table.Body {...$tableBodyAttrs}>
-			{#each $pageRows as row (row.id)}
-				<Subscribe rowAttrs={row.attrs()} let:rowAttrs>
-					<Table.Row {...rowAttrs}>
-						{#each row.cells as cell (cell.id)}
-							<Subscribe attrs={cell.attrs()} let:attrs>
-								<Table.Cell {...attrs}>
-									<Render of={cell.render()} />
-								</Table.Cell>
-							</Subscribe>
-						{/each}
-					</Table.Row>
-				</Subscribe>
+		</thead>
+		<tbody class="[&_tr:last-child]:border-0">
+			{#each $table.getRowModel().rows as row}
+				<tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+					{#each row.getVisibleCells() as cell, i}
+						<td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+							{#if cell.getContext().column.id === 'name'}
+								<div class="inline-flex items-center gap-2">
+									<span
+										class="w-4 h-4"
+										style="background-color: {cell.getContext().row.original.statusColor} "
+									/>{cell.getValue()}
+								</div>
+							{:else}
+								<svelte:component
+									this={flexRender(cell.column.columnDef.cell, cell.getContext())}
+								/>
+							{/if}
+						</td>
+					{/each}
+				</tr>
 			{/each}
-		</Table.Body>
-	</Table.Root>
+		</tbody>
+	</table>
 </div>
