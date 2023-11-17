@@ -1,7 +1,7 @@
 import type { Actions, PageServerLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms/server';
 import { formSchema } from './schema';
-import { fail } from '@sveltejs/kit';
+import { fail, error } from '@sveltejs/kit';
 
 import prisma from '$lib/prisma';
 
@@ -28,9 +28,11 @@ export const actions: Actions = {
 					statusColor: form.data.statusColor
 				}
 			});
-		} catch (error) {
-			console.log(error);
-			return fail(500);
+		} catch (err) {
+			console.log(err);
+			throw error(500, {
+				message: 'Error creating status'
+			});
 		}
 		return {
 			form

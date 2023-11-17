@@ -6,15 +6,30 @@
 	import { Button } from '$lib/components/ui/button';
 	import { formSchema } from './schema';
 	import { superForm } from 'sveltekit-superforms/client';
-
+	import { toast } from 'svoast';
 	import AutoComplete from '$lib/components/ui/autocomplete/AutoComplete.svelte';
 
 	export let data: PageData;
 	import colors from '$lib/components/colors.json';
+	import { goto } from '$app/navigation';
 
-	const { form, errors, enhance } = superForm(data.form, {
+	const { form, errors, enhance, delayed } = superForm(data.form, {
 		validators: formSchema,
-		dataType: 'json'
+		dataType: 'json',
+		onUpdated: ({ form }) => {
+			if (form.valid) {
+				toast.success('Status added successfully', {
+					closable: true
+				});
+				goto('/admin/status/list');
+			}
+		},
+		onError: ({ result }) => {
+			toast.error('Something went wrong!', {
+				closable: true
+			});
+			console.log(result.error.message);
+		}
 	});
 
 	let statusColor = { value: '', label: '' };
@@ -63,5 +78,5 @@
 		>
 	{/if}
 
-	<Button type="submit" class="self-start">Submit</Button>
+	<Button type="submit" class="self-start" loading={$delayed}>Submit</Button>
 </form>
