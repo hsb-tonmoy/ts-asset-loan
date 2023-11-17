@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import { Label } from '$lib/components/ui/label';
 	import { Input } from '$lib/components/ui/input';
 	import { Textarea } from '$lib/components/ui/textarea';
@@ -9,7 +8,9 @@
 	import { toast } from 'svoast';
 	import AutoComplete from '$lib/components/ui/autocomplete/AutoComplete.svelte';
 
-	export let data: PageData;
+	export let data: any;
+	export let edit: boolean = false;
+
 	import colors from '$lib/components/colors.json';
 	import { goto } from '$app/navigation';
 
@@ -40,6 +41,7 @@
 </script>
 
 <form method="POST" use:enhance class="flex flex-col gap-4 text-gray-800">
+	<input type="hidden" id="id" name="id" />
 	<Label for="name">Name</Label>
 	<Input type="text" name="name" id="name" bind:value={$form.name} class="w-auto min-w-[300px]" />
 	{#if $errors.name}

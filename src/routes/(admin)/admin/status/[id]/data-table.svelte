@@ -5,7 +5,8 @@
 		createSvelteTable,
 		flexRender,
 		getCoreRowModel,
-		getSortedRowModel
+		getSortedRowModel,
+		renderComponent
 	} from '@tanstack/svelte-table';
 	import type { TableOptions, ColumnDef } from '@tanstack/svelte-table';
 	import type { RequestStatus } from '@prisma/client';
@@ -13,6 +14,8 @@
 	import Label from '$lib/components/ui/label/label.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
+
+	import RowActions from './row-actions.svelte';
 
 	export let data: RequestStatus[];
 
@@ -31,6 +34,10 @@
 			accessorKey: 'statusColor',
 			header: 'Status Color',
 			cell: (info) => info.getValue()
+		},
+		{
+			id: 'actions',
+			cell: (info) => renderComponent(RowActions, { row: info.row.original })
 		}
 	];
 

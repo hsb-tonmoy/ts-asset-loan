@@ -42,9 +42,9 @@
 			className="w-full"
 		/>
 
-		{#if $errors.category}
+		<!-- {#if $errors.category}
 			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.category}</span>
-		{/if}
+		{/if} -->
 	</div>
 
 	<div class="flex flex-col gap-4 col-span-3">
