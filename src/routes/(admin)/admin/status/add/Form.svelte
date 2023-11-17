@@ -13,35 +13,34 @@
 	import colors from '$lib/components/colors.json';
 
 	const { form, errors, enhance } = superForm(data.form, {
-		validators: formSchema
+		validators: formSchema,
+		dataType: 'json'
 	});
+
+	let statusColor = { value: '', label: '' };
+
+	$: {
+		$form.statusColor = statusColor.value;
+	}
 </script>
 
 <form method="POST" use:enhance class="flex flex-col gap-4 text-gray-800">
 	<Label for="name">Name</Label>
-	<Input
-		type="text"
-		name="name"
-		id="name"
-		bind:value={$form.name}
-		class="w-auto min-w-[300px] border-gray-300 h-10"
-	/>
+	<Input type="text" name="name" id="name" bind:value={$form.name} class="w-auto min-w-[300px]" />
 	{#if $errors.name}
 		<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.name}</span>
 	{/if}
 	<Label for="statusColor">Status Color</Label>
 
 	<AutoComplete
-		name="statusColor"
-		id="statusColor"
 		items={colors}
-		bind:value={$form.statusColor}
+		bind:selectedItem={statusColor}
 		valueFieldName="value"
 		labelFieldName="label"
 		showClear={true}
 		><div slot="item" let:item let:label>
 			<div class="inline-flex items-center gap-2">
-				<span class="w-4 h-4" style="background-color:{item.value}" />{label}
+				<span class="w-4 h-4" style="background-color:{item.value}" />{@html label}
 			</div>
 		</div>
 	</AutoComplete>
@@ -57,7 +56,7 @@
 		bind:value={$form.description}
 		placeholder="Add a short description..."
 		rows={1}
-		class="w-auto min-w-[300px] border-gray-300"
+		class="w-auto min-w-[300px]"
 	/>
 	{#if $errors.description}
 		<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.description}</span

@@ -10,6 +10,9 @@
 		ChevronDown
 	} from 'lucide-svelte';
 
+	import * as Collapsible from '$lib/components/ui/collapsible';
+	import { Button } from '$lib/components/ui/button';
+
 	const menuItems = [
 		{
 			name: 'Dashboard',
@@ -19,22 +22,62 @@
 		{
 			name: 'Users',
 			icon: User,
-			link: '/admin'
+			link: '/admin',
+			submenu: [
+				{
+					name: 'Add User',
+					link: '/admin/user/add'
+				},
+				{
+					name: 'List Users',
+					link: '/admin/user/list'
+				}
+			]
 		},
 		{
 			name: 'Requests',
 			icon: ClipboardList,
-			link: '/admin'
+			link: '/admin',
+			submenu: [
+				{
+					name: 'Add Request',
+					link: '/admin/request/add'
+				},
+				{
+					name: 'List Requests',
+					link: '/admin/request/list'
+				}
+			]
 		},
 		{
 			name: 'Categories',
 			icon: MonitorSmartphone,
-			link: '/admin'
+			link: '/admin',
+			submenu: [
+				{
+					name: 'Add Category',
+					link: '/admin/category/add'
+				},
+				{
+					name: 'List Categories',
+					link: '/admin/category/list'
+				}
+			]
 		},
 		{
-			name: 'Statues',
+			name: 'Statuses',
 			icon: ClipboardEdit,
-			link: '/admin/status/add'
+			link: '/admin/status/add',
+			submenu: [
+				{
+					name: 'Add Status',
+					link: '/admin/status/add'
+				},
+				{
+					name: 'List Statuses',
+					link: '/admin/status/list'
+				}
+			]
 		},
 		{
 			name: 'Settings',
@@ -57,13 +100,33 @@
 	</div>
 	<div class="flex flex-col gap-6">
 		{#each menuItems as item}
-			<div class="flex items-center justify-between text-gray-300 hover:text-white">
-				<div class="inline-flex items-center gap-2">
-					<svelte:component this={item.icon} class="w-5 h-5" />
-					<span class="text-sm"><a href={item.link}>{item.name}</a></span>
+			<Collapsible.Root>
+				<div class="flex items-center justify-between text-gray-300 hover:text-white">
+					<div class="inline-flex items-center gap-2">
+						<svelte:component this={item.icon} class="w-5 h-5" />
+						<span class="text-sm"><a href={item.link}>{item.name}</a></span>
+					</div>
+					<Collapsible.Trigger asChild let:builder>
+						<Button
+							builders={[builder]}
+							variant="ghost"
+							size="sm"
+							class="w-9 p-0 hover:bg-none {item.submenu === undefined ? 'invisible' : ''} "
+							disabled={item.submenu === undefined}
+						>
+							<ChevronDown strokeWidth={1.25} class="w-5 h-5" />
+							<span class="sr-only">Toggle</span>
+						</Button>
+					</Collapsible.Trigger>
 				</div>
-				<ChevronDown strokeWidth={1.25} class="w-5 h-5" />
-			</div>
+				{#if item.submenu}
+					<Collapsible.Content class="flex flex-col gap-2 mt-2">
+						{#each item.submenu as submenu}
+							<a href={submenu.link} class="text-sm px-4">{submenu.name}</a>
+						{/each}
+					</Collapsible.Content>
+				{/if}
+			</Collapsible.Root>
 		{/each}
 	</div>
 </div>
