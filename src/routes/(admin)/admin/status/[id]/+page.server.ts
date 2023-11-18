@@ -52,6 +52,47 @@ export const actions: Actions = {
 			});
 		}
 
+		if (form.data.delete) {
+			try {
+				await prisma.requestStatus.delete({
+					where: {
+						id: form.data.id
+					}
+				});
+			} catch (err) {
+				console.log(err);
+				throw error(500, {
+					message: 'Error deleting status'
+				});
+			}
+			return {
+				form
+			};
+		}
+
+		if (form.data.id) {
+			try {
+				await prisma.requestStatus.update({
+					where: {
+						id: form.data.id
+					},
+					data: {
+						name: form.data.name,
+						description: form.data.description,
+						statusColor: form.data.statusColor
+					}
+				});
+			} catch (err) {
+				console.log(err);
+				throw error(500, {
+					message: 'Error updating status'
+				});
+			}
+			return {
+				form
+			};
+		}
+
 		try {
 			await prisma.requestStatus.create({
 				data: {

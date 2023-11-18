@@ -1298,7 +1298,7 @@
 		box-sizing: border-box;
 	}
 	.autocomplete-input {
-		@apply flex h-10 w-full bg-transparent py-2 px-2 text-sm dark:text-white file:border-0 file:bg-transparent file:text-foreground file:text-sm file:font-medium placeholder:text-muted-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+		@apply flex h-10 w-full bg-transparent py-2 px-2 text-sm dark:text-white file:border-0 file:bg-transparent file:text-foreground file:text-sm file:font-medium placeholder:text-muted-foreground ring-offset-background hover:ring-1 hover:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 rounded-md;
 		border-color: rgb(38, 38, 38);
 	}
 

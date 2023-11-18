@@ -67,7 +67,7 @@
 		{
 			name: 'Statuses',
 			icon: ClipboardEdit,
-			link: '/admin/status/add',
+			link: '/admin/status/list',
 			submenu: [
 				{
 					name: 'Add Status',
