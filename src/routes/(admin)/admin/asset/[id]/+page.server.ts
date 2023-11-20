@@ -7,42 +7,43 @@ import { formSchema } from './schema';
 
 import prisma from '$lib/prisma';
 
-export const load: PageServerLoad = async ({ params, url }) => {
+export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
 
-	const search = url.searchParams.get('search') || '';
+	const categories = await prisma.equipmentCategory.findMany({
+		orderBy: {
+			name: 'asc'
+		}
+	});
 
 	if (id === 'add') {
 		return {
+			categories,
 			form: superValidate(formSchema),
-			category: null
+			asset: null
 		};
 	} else if (id === 'list') {
-		const categories = await prisma.equipmentCategory.findMany({
+		const assets = await prisma.asset.findMany({
 			orderBy: {
 				id: 'asc'
-			},
-			where: {
-				name: {
-					contains: search
-				}
 			}
 		});
 
 		return {
-			categories
+			assets
 		};
 	} else if (!isNaN(Number(id))) {
-		const category = await prisma.equipmentCategory.findUnique({
+		const asset = await prisma.asset.findUnique({
 			where: {
 				id: Number(id)
 			}
 		});
 
-		if (category) {
+		if (asset) {
 			return {
-				form: superValidate(category, formSchema),
-				category
+				categories,
+				form: superValidate(asset, formSchema),
+				asset
 			};
 		} else {
 			throw error(404, { message: 'Not found' });
@@ -62,20 +63,24 @@ export const actions: Actions = {
 		const filePath = await saveFile(formData);
 
 		try {
-			await prisma.equipmentCategory.create({
+			await prisma.asset.create({
 				data: {
 					name: form.data.name,
 					image: filePath,
+					asset_tag: form.data.asset_tag,
+					category: {
+						connect: { id: Number(form.data.category) }
+					},
 					description: form.data.description
 				}
 			});
 		} catch (err) {
 			console.log(err);
 			throw error(500, {
-				message: 'Error creating category'
+				message: 'Error creating asset'
 			});
 		}
-		return message(form, 'category successfully created');
+		return message(form, 'asset successfully created');
 	},
 	update: async ({ request, params }) => {
 		const { id } = params;
@@ -85,40 +90,44 @@ export const actions: Actions = {
 		if (!form.valid) return fail(400, { form });
 
 		try {
-			const existingCategory = await prisma.equipmentCategory.findUnique({
+			const existingasset = await prisma.asset.findUnique({
 				where: {
 					id: Number(id)
 				}
 			});
 
-			let filePath = existingCategory?.image;
+			let filePath = existingasset?.image;
 
 			const newImage = formData.get('image');
 			if (newImage && newImage instanceof Blob && newImage.size > 0) {
-				if (existingCategory?.image) {
-					await deleteFile(existingCategory.image);
+				if (existingasset?.image) {
+					await deleteFile(existingasset.image);
 				}
 
 				filePath = await saveFile(formData);
 			}
 
-			await prisma.equipmentCategory.update({
+			await prisma.asset.update({
 				where: {
 					id: Number(id)
 				},
 				data: {
 					name: form.data.name,
 					image: filePath,
+					asset_tag: form.data.asset_tag,
+					category: {
+						connect: { id: Number(form.data.category) }
+					},
 					description: form.data.description
 				}
 			});
 		} catch (err) {
 			console.log(err);
 			throw error(500, {
-				message: 'Error updating category'
+				message: 'Error updating asset'
 			});
 		}
-		return message(form, 'category successfully updated');
+		return message(form, 'asset successfully updated');
 	},
 
 	delete: async ({ request }) => {
@@ -130,24 +139,24 @@ export const actions: Actions = {
 		const id = formData.get('id');
 
 		try {
-			const existingCategory = await prisma.equipmentCategory.findUnique({
+			const existingasset = await prisma.asset.findUnique({
 				where: {
 					id: Number(id)
 				}
 			});
 
-			if (existingCategory?.image) {
-				await deleteFile(existingCategory.image);
+			if (existingasset?.image) {
+				await deleteFile(existingasset.image);
 			}
 		} catch (err) {
 			console.log(err);
 			throw error(500, {
-				message: 'Error deleting category'
+				message: 'Error deleting asset'
 			});
 		}
 
 		try {
-			await prisma.equipmentCategory.delete({
+			await prisma.asset.delete({
 				where: {
 					id: Number(id)
 				}
@@ -155,10 +164,10 @@ export const actions: Actions = {
 		} catch (err) {
 			console.log(err);
 			throw error(500, {
-				message: 'Error deleting category'
+				message: 'Error deleting asset'
 			});
 		}
-		return message(form, 'category successfully deleted');
+		return message(form, 'asset successfully deleted');
 	}
 };
 
@@ -166,7 +175,7 @@ async function saveFile(formData: FormData) {
 	const filePath = path.join(
 		'static',
 		'uploads',
-		'categories',
+		'assets',
 		`${crypto.randomUUID()}.${(formData.get('image') as Blob).type.split('/')[1]}`
 	);
 
@@ -186,7 +195,7 @@ async function saveFile(formData: FormData) {
 }
 
 async function deleteFile(filePath: string) {
-	const basePath = path.join('static', 'uploads', 'categories');
+	const basePath = path.join('static', 'uploads', 'assets');
 
 	const relativeFilePath = path.relative(basePath, filePath);
 	const resolvedPath = path.resolve(basePath, relativeFilePath);

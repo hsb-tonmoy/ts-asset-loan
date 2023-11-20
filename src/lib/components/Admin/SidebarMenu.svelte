@@ -4,6 +4,7 @@
 		User,
 		ClipboardList,
 		MonitorSmartphone,
+		Monitor,
 		ClipboardEdit,
 		Cog,
 		BadgeHelp,
@@ -46,6 +47,21 @@
 				{
 					name: 'List Requests',
 					link: '/admin/request/list'
+				}
+			]
+		},
+		{
+			name: 'Assets',
+			icon: Monitor,
+			link: '/admin/asset/list',
+			submenu: [
+				{
+					name: 'Add Asset',
+					link: '/admin/asset/add'
+				},
+				{
+					name: 'List Assets',
+					link: '/admin/asset/list'
 				}
 			]
 		},

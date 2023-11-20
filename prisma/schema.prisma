@@ -49,8 +49,7 @@ model Request {
   updatedAt      DateTime @updatedAt @default(now())
   status_id      Int
   status         RequestStatus @relation(fields: [status_id], references: [id])
-  equipment_id   Int
-  equipmentCategory      EquipmentCategory @relation(fields: [equipment_id], references: [id])
+  requestedCategories String?
   firstName     String
   lastName      String
   email         String
@@ -62,6 +61,16 @@ model Request {
   assigned_to_user      User   @relation(fields: [assigned_to_user_id], references: [id], name: "requestsAssigned")
   approved_by_user_id   Int
   approved_by_user      User   @relation(fields: [approved_by_user_id], references: [id], name: "requestsApproved")
+}
+
+model Asset {
+  id          Int     @id @default(autoincrement()) @unique
+  name        String
+  asset_tag  String  @unique
+  image       String?
+  description String?
+  category_id Int
+  category  EquipmentCategory @relation(fields: [category_id], references: [id])
 
 }
 
@@ -70,7 +79,7 @@ model EquipmentCategory {
   name        String  @unique
   image       String?
   description String?
-  requests   Request[]
+  assets      Asset[]
 }
 
 model RequestStatus {
