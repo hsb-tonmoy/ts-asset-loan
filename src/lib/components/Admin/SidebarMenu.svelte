@@ -52,7 +52,7 @@
 		{
 			name: 'Categories',
 			icon: MonitorSmartphone,
-			link: '/admin',
+			link: '/admin/category/list',
 			submenu: [
 				{
 					name: 'Add Category',

@@ -1,6 +1,6 @@
 import { error, fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { superValidate } from 'sveltekit-superforms/server';
+import { superValidate, message } from 'sveltekit-superforms/server';
 import { formSchema } from './schema';
 
 import prisma from '$lib/prisma';
@@ -44,54 +44,74 @@ export const load: PageServerLoad = async ({ params }) => {
 };
 
 export const actions: Actions = {
-	default: async (event) => {
-		const form = await superValidate(event, formSchema);
-		if (!form.valid) {
-			return fail(400, {
-				form
-			});
-		}
+	// default: async ({ request }) => {
+	// 	const formData = await request.formData();
+	// 	const form = await superValidate(formData, formSchema);
 
-		if (form.data.delete) {
-			try {
-				await prisma.requestStatus.delete({
-					where: {
-						id: form.data.id
-					}
-				});
-			} catch (err) {
-				console.log(err);
-				throw error(500, {
-					message: 'Error deleting status'
-				});
-			}
-			return {
-				form
-			};
-		}
+	// 	if (!form.valid) return fail(400, { form });
 
-		if (form.data.id) {
-			try {
-				await prisma.requestStatus.update({
-					where: {
-						id: form.data.id
-					},
-					data: {
-						name: form.data.name,
-						description: form.data.description,
-						statusColor: form.data.statusColor
-					}
-				});
-			} catch (err) {
-				console.log(err);
-				throw error(500, {
-					message: 'Error updating status'
-				});
-			}
-			return {
-				form
-			};
-		}
+	// 	const id = formData.get('id') ? Number(formData.get('id')) : null;
+
+	// 	console.log(id);
+
+	// 	if (formData.has('delete') && id) {
+	// 		try {
+	// 			await prisma.requestStatus.delete({
+	// 				where: {
+	// 					id
+	// 				}
+	// 			});
+	// 		} catch (err) {
+	// 			console.log(err);
+	// 			throw error(500, {
+	// 				message: 'Error deleting status'
+	// 			});
+	// 		}
+	// 		return message(form, 'Status successfully deleted');
+	// 	}
+
+	// 	if (id) {
+	// 		try {
+	// 			await prisma.requestStatus.update({
+	// 				where: {
+	// 					id: Number(formData.get('id'))
+	// 				},
+	// 				data: {
+	// 					name: form.data.name,
+	// 					description: form.data.description,
+	// 					statusColor: form.data.statusColor
+	// 				}
+	// 			});
+	// 		} catch (err) {
+	// 			console.log(err);
+	// 			throw error(500, {
+	// 				message: 'Error updating status'
+	// 			});
+	// 		}
+	// 		return message(form, 'Status successfully updated');
+	// 	} else {
+	// 		try {
+	// 			await prisma.requestStatus.create({
+	// 				data: {
+	// 					name: form.data.name,
+	// 					description: form.data.description,
+	// 					statusColor: form.data.statusColor
+	// 				}
+	// 			});
+	// 		} catch (err) {
+	// 			console.log(err);
+	// 			throw error(500, {
+	// 				message: 'Error creating status'
+	// 			});
+	// 		}
+	// 		return message(form, 'Status successfully created');
+	// 	}
+	// },
+	create: async ({ request }) => {
+		const formData = await request.formData();
+		const form = await superValidate(formData, formSchema);
+
+		if (!form.valid) return fail(400, { form });
 
 		try {
 			await prisma.requestStatus.create({
@@ -107,8 +127,52 @@ export const actions: Actions = {
 				message: 'Error creating status'
 			});
 		}
-		return {
-			form
-		};
+		return message(form, 'Status successfully created');
+	},
+	update: async ({ request, params }) => {
+		const { id } = params;
+		const formData = await request.formData();
+		const form = await superValidate(formData, formSchema);
+
+		if (!form.valid) return fail(400, { form });
+
+		try {
+			await prisma.requestStatus.update({
+				where: {
+					id: Number(id)
+				},
+				data: {
+					name: form.data.name,
+					description: form.data.description,
+					statusColor: form.data.statusColor
+				}
+			});
+		} catch (err) {
+			console.log(err);
+			throw error(500, {
+				message: 'Error updating status'
+			});
+		}
+		return message(form, 'Status successfully updated');
+	},
+	delete: async ({ request }) => {
+		const formData = await request.formData();
+		const form = await superValidate(formData, formSchema);
+
+		if (!form.valid) return fail(400, { form });
+
+		try {
+			await prisma.requestStatus.delete({
+				where: {
+					id: Number(formData.get('id'))
+				}
+			});
+		} catch (err) {
+			console.log(err);
+			throw error(500, {
+				message: 'Error deleting status'
+			});
+		}
+		return message(form, 'Status successfully deleted');
 	}
 };

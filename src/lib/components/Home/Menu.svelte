@@ -1,20 +1,20 @@
 <script lang="ts">
-	import { ActivitySquare } from 'lucide-svelte';
+	import { Gauge, User, HelpCircle } from 'lucide-svelte';
 
 	const menuItems = [
 		{
 			name: 'Login',
-			icon: 'material-symbols:person',
+			icon: User,
 			link: '/auth/login'
 		},
 		{
 			name: 'Dashboard',
-			icon: 'IconsDashboard',
+			icon: Gauge,
 			link: '/admin'
 		},
 		{
 			name: 'Help',
-			icon: 'material-symbols:support',
+			icon: HelpCircle,
 			link: '/auth/login'
 		}
 	];
@@ -33,7 +33,7 @@
 				class="flex justify-center shrink border-0 text-[#b0b0b0] hover:text-black hover:dark:text-white hover:border-l-[6px] border-amber-600 transition-all duration-150 ease-in-out"
 			>
 				<a href={menuItem.link} class="inline-flex flex-col items-center gap-1">
-					<ActivitySquare />
+					<svelte:component this={menuItem.icon} />
 					<span class="text-sm tracking-wide text-center">{menuItem.name}</span>
 				</a>
 			</li>

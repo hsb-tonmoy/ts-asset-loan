@@ -27,7 +27,7 @@
 	}}
 	class="inline-flex items-center gap-2"
 >
-	<Button href="/admin/status/{row.id}" variant="outline" size="icon">
+	<Button href="/admin/category/{row.id}" variant="outline" size="icon">
 		<Pencil class="w-4 h-4" />
 	</Button>
 	<AlertDialog.Root>
@@ -40,7 +40,7 @@
 			<AlertDialog.Header>
 				<AlertDialog.Title>Are you sure you want to delete {row.name}?</AlertDialog.Title>
 				<AlertDialog.Description>
-					This action cannot be undone. This will alter all the requests under this status and set
+					This action cannot be undone. This will alter all the requests under this category and set
 					them to the default.
 				</AlertDialog.Description>
 			</AlertDialog.Header>

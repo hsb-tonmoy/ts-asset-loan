@@ -8,18 +8,18 @@
 
 	$: action = $page.params.id;
 
-	$: statuses = data.statuses;
+	$: categories = data.categories;
 
 	const baseMenuItems = [
 		{
-			name: 'List all statuses',
+			name: 'List all categories',
 			action: 'list',
-			link: '/admin/status/list'
+			link: '/admin/category/list'
 		},
 		{
-			name: 'Create a new status',
+			name: 'Create a new category',
 			action: 'add',
-			link: '/admin/status/add'
+			link: '/admin/category/add'
 		}
 	];
 
@@ -28,9 +28,9 @@
 			? [
 					...baseMenuItems,
 					{
-						name: `Edit '${data.status?.name}'`,
+						name: `Edit '${data.category?.name}'`,
 						action: action,
-						link: `/admin/status/${action}`
+						link: `/admin/category/${action}`
 					}
 			  ]
 			: [...baseMenuItems];
@@ -38,7 +38,7 @@
 
 <div class="flex gap-6">
 	<div class="flex flex-col bg-white dark:bg-[#18181C] py-4 w-3/12">
-		<h6 class="text-lg px-4 mb-4">Status Settings</h6>
+		<h6 class="text-lg px-4 mb-4">category Settings</h6>
 		{#each menuItems as item}
 			<a
 				href={item.link}
@@ -55,9 +55,9 @@
 			<Form {data} />
 		{:else if !isNaN(+action)}
 			<Form {data} edit={true} />
-		{:else if action === 'list' && statuses}
-			{#key statuses}
-				<DataTable data={statuses} />
+		{:else if action === 'list' && categories}
+			{#key categories}
+				<DataTable data={categories} />
 			{/key}
 		{/if}
 	</div>
