@@ -9,7 +9,7 @@
 		renderComponent
 	} from '@tanstack/svelte-table';
 	import type { TableOptions, ColumnDef } from '@tanstack/svelte-table';
-	import type { RequestStatus } from '@prisma/client';
+	import type { EquipmentCategory } from '@prisma/client';
 
 	import Label from '$lib/components/ui/label/label.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
@@ -18,9 +18,9 @@
 	import RowActions from './row-actions.svelte';
 	import { convertToImageURL } from '$lib/utils';
 
-	export let data: RequestStatus[];
+	export let data: EquipmentCategory[];
 
-	const defaultColumns: ColumnDef<RequestStatus>[] = [
+	const defaultColumns: ColumnDef<EquipmentCategory>[] = [
 		{
 			accessorKey: 'id',
 			header: 'ID',
@@ -59,7 +59,7 @@
 		}));
 	};
 
-	const options = writable<TableOptions<RequestStatus>>({
+	const options = writable<TableOptions<EquipmentCategory>>({
 		data,
 		columns: defaultColumns,
 		onSortingChange: setSorting,
