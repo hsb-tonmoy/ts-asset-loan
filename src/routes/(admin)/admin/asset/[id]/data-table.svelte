@@ -8,7 +8,7 @@
 		getSortedRowModel,
 		renderComponent
 	} from '@tanstack/svelte-table';
-	import type { TableOptions, ColumnDef } from '@tanstack/svelte-table';
+	import type { TableOptions, ColumnDef, RowSelectionState } from '@tanstack/svelte-table';
 	import type { Asset } from '@prisma/client';
 
 	import Label from '$lib/components/ui/label/label.svelte';
@@ -16,11 +16,30 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 
 	import RowActions from './row-actions.svelte';
+	import RowCheckbox from './row-checkbox.svelte';
+	import ColumnVisibility from './column-visibility.svelte';
+
 	import { convertToImageURL } from '$lib/utils';
 
 	export let data: Asset[];
 
 	const defaultColumns: ColumnDef<Asset>[] = [
+		{
+			id: 'select',
+			header: ({ table }) =>
+				renderComponent(RowCheckbox, {
+					checked: table.getIsAllRowsSelected(),
+					indeterminate: table.getIsSomeRowsSelected(),
+					onChange: table.getToggleAllRowsSelectedHandler()
+				}),
+			cell: (props) =>
+				renderComponent(RowCheckbox, {
+					checked: props.row.getIsSelected(),
+					disabled: !props.row.getCanSelect(),
+					indeterminate: props.row.getIsSomeSelected(),
+					onChange: props.row.getToggleSelectedHandler()
+				})
+		},
 		{
 			accessorKey: 'id',
 			header: 'ID',
@@ -52,7 +71,28 @@
 		}
 	];
 
+	let selection: RowSelectionState = {};
+
 	let sorting = [];
+
+	const onSelect = (updater: any) => {
+		if (updater instanceof Function) {
+			selection = updater(selection);
+		} else {
+			selection = updater;
+		}
+
+		options.update(
+			(old) =>
+				({
+					...old,
+					state: {
+						...old.state,
+						rowSelection: selection
+					}
+				} as TableOptions<Child>)
+		);
+	};
 
 	const setSorting = (updater) => {
 		if (updater instanceof Function) {
@@ -69,19 +109,38 @@
 		}));
 	};
 
+	let columnVisibility = {
+		image: false
+	};
+
+	const setColumnVisibility = (updater) => {
+		if (updater instanceof Function) {
+			columnVisibility = updater(columnVisibility);
+		} else {
+			columnVisibility = updater;
+		}
+		options.update((old) => ({
+			...old,
+			state: {
+				...old.state,
+				columnVisibility
+			}
+		}));
+	};
+
 	const options = writable<TableOptions<Asset>>({
 		data,
 		columns: defaultColumns,
 		onSortingChange: setSorting,
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel(),
-		initialState: {
-			columnVisibility: {
-				id: true,
-				name: true,
-				image: false
-			}
-		}
+		state: {
+			rowSelection: selection,
+			columnVisibility
+		},
+		enableRowSelection: true,
+		onRowSelectionChange: onSelect,
+		onColumnVisibilityChange: setColumnVisibility
 	});
 
 	const rerender = () => {
@@ -121,8 +180,13 @@
 			<Plus class="h-4 w-4 mr-1" />
 			New
 		</Button>
-		<div class="inline-flex items-center pr-2">
-			<Trash2 class="w-5 h-5" />
+		<div class="inline-flex items-center gap-4">
+			{#if Object.keys(selection).length > 0}
+				<div class="inline-flex items-center pr-2">
+					<Trash2 class="w-5 h-5" />
+				</div>
+			{/if}
+			<ColumnVisibility {table} />
 		</div>
 	</div>
 

@@ -32,8 +32,6 @@ export const load: PageServerLoad = async ({ params }) => {
 			}
 		});
 
-		console.log(assets);
-
 		return {
 			assets
 		};

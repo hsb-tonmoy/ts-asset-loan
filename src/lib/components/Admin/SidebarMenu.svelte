@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import {
 		Gauge,
 		User,
@@ -117,7 +118,11 @@
 	<div class="flex flex-col gap-6">
 		{#each menuItems as item}
 			<Collapsible.Root>
-				<div class="flex items-center justify-between text-gray-300 hover:text-white">
+				<div
+					class="flex items-center justify-between {$page.url.pathname === item.link
+						? 'text-white'
+						: 'text-gray-500'} hover:text-white"
+				>
 					<div class="inline-flex items-center gap-2">
 						<svelte:component this={item.icon} class="w-5 h-5" />
 						<span class="text-sm"><a href={item.link}>{item.name}</a></span>
@@ -138,7 +143,12 @@
 				{#if item.submenu}
 					<Collapsible.Content class="flex flex-col gap-2 mt-2">
 						{#each item.submenu as submenu}
-							<a href={submenu.link} class="text-sm px-4">{submenu.name}</a>
+							<a
+								href={submenu.link}
+								class="{$page.url.pathname != submenu.link
+									? 'text-gray-500'
+									: 'text-white'} text-sm px-4">{submenu.name}</a
+							>
 						{/each}
 					</Collapsible.Content>
 				{/if}
