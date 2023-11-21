@@ -19,6 +19,7 @@
 
 	const { form, errors, enhance, delayed } = superForm(data.form, {
 		validators: formSchema,
+		dataType: 'json',
 		onUpdated: ({ form }) => {
 			if (form.valid) {
 				toast.success(`Asset ${edit ? 'updated' : 'added'} successfully`, {
@@ -35,11 +36,7 @@
 		}
 	});
 
-	let category: string;
-
-	$: console.log(category);
-
-	async function getCategories(keyword) {
+	async function getCategories(keyword: string) {
 		const url = '/api/category/?search=' + encodeURIComponent(keyword);
 
 		const response = await fetch(url);
@@ -48,7 +45,7 @@
 	}
 
 	const handleImageUpload = (e: Event) => {
-		const image = (e.target as HTMLInputElement).files[0];
+		const image = (e.target as HTMLInputElement | null)?.files?.[0] ?? null;
 		if (!image) return;
 
 		uploadedImage = URL.createObjectURL(image);
@@ -60,6 +57,8 @@
 	}));
 
 	if (edit) uploadedImage = convertToImageURL(data.asset.image);
+
+	$: console.log($form);
 </script>
 
 <form
@@ -85,15 +84,18 @@
 	<AutoComplete
 		searchFunction={getCategories}
 		delay={200}
-		maxItemsToShowInList={5}
-		bind:selectedItem={category}
+		bind:value={$form.category}
 		localFiltering={false}
 		labelFieldName="name"
 		valueFieldName="id"
 		showClear={true}
 		><div slot="item" let:item let:label>
 			<div class="inline-flex items-center gap-2">
-				<span class="w-4 h-4" style="background-color:{item.value}" />{@html label}
+				<img
+					class="w-10 h-10 object-cover"
+					src={convertToImageURL(item.image)}
+					alt={label}
+				/>{@html label}
 			</div>
 		</div>
 	</AutoComplete>

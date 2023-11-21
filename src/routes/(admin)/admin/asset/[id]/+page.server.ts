@@ -24,10 +24,15 @@ export const load: PageServerLoad = async ({ params }) => {
 		};
 	} else if (id === 'list') {
 		const assets = await prisma.asset.findMany({
+			include: {
+				category: true
+			},
 			orderBy: {
 				id: 'asc'
 			}
 		});
+
+		console.log(assets);
 
 		return {
 			assets

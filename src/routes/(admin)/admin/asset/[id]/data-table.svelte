@@ -27,6 +27,11 @@
 			cell: (info) => info.getValue()
 		},
 		{
+			accessorKey: 'category.name',
+			header: 'Category',
+			cell: (info) => info.getValue()
+		},
+		{
 			accessorKey: 'asset_tag',
 			header: 'Asset Tag',
 			cell: (info) => info.getValue()
@@ -111,7 +116,7 @@
 	<div class="flex justify-between items-center my-4">
 		<Button
 			class="bg-blue-500 hover:bg-blue-400 text-white px-4 py-1 rounded"
-			href="/admin/category/add"
+			href="/admin/asset/add"
 		>
 			<Plus class="h-4 w-4 mr-1" />
 			New
