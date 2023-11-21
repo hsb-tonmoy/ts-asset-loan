@@ -33,12 +33,16 @@ export const load: PageServerLoad = async ({ params }) => {
 		});
 
 		return {
+			categories,
 			assets
 		};
 	} else if (!isNaN(Number(id))) {
 		const asset = await prisma.asset.findUnique({
 			where: {
 				id: Number(id)
+			},
+			include: {
+				category: true
 			}
 		});
 
@@ -63,14 +67,21 @@ export const actions: Actions = {
 
 		if (!form.valid) return fail(400, { form });
 
-		const filePath = await saveFile(formData);
+		console.log(form.data);
 
+		const filePath = await saveFile(formData);
 		try {
 			await prisma.asset.create({
 				data: {
 					name: form.data.name,
 					image: filePath,
 					asset_tag: form.data.asset_tag,
+					serial: form.data.serial,
+					model: form.data.model,
+					location: form.data.location,
+					purchase_cost: Number(form.data.purchase_cost),
+					mac_address: form.data.mac_address,
+					imei: form.data.imei,
 					category: {
 						connect: { id: Number(form.data.category) }
 					},
@@ -90,24 +101,31 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const form = await superValidate(formData, formSchema);
 
+		console.log(form.data);
+
 		if (!form.valid) return fail(400, { form });
 
 		try {
-			const existingasset = await prisma.asset.findUnique({
+			const existingAsset = await prisma.asset.findUnique({
 				where: {
 					id: Number(id)
 				}
 			});
 
-			let filePath = existingasset?.image;
+			let filePath = existingAsset?.image;
 
 			const newImage = formData.get('image');
-			if (newImage && newImage instanceof Blob && newImage.size > 0) {
-				if (existingasset?.image) {
-					await deleteFile(existingasset.image);
+			if (newImage instanceof Blob && newImage.size > 0) {
+				if (existingAsset?.image) {
+					await deleteFile(existingAsset.image);
 				}
-
 				filePath = await saveFile(formData);
+			} else if (!newImage || newImage === '') {
+				// Check if newImage is empty and delete the existing file
+				if (existingAsset?.image) {
+					await deleteFile(existingAsset.image);
+					filePath = null; // Set filePath to null or empty string
+				}
 			}
 
 			await prisma.asset.update({
@@ -118,6 +136,12 @@ export const actions: Actions = {
 					name: form.data.name,
 					image: filePath,
 					asset_tag: form.data.asset_tag,
+					serial: form.data.serial,
+					model: form.data.model,
+					location: form.data.location,
+					purchase_cost: Number(form.data.purchase_cost),
+					mac_address: form.data.mac_address,
+					imei: form.data.imei,
 					category: {
 						connect: { id: Number(form.data.category) }
 					},
@@ -136,8 +160,6 @@ export const actions: Actions = {
 	delete: async ({ request }) => {
 		const formData = await request.formData();
 		const form = await superValidate(formData, formSchema);
-
-		if (!form.valid) return fail(400, { form });
 
 		const id = formData.get('id');
 

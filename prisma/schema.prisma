@@ -19,6 +19,7 @@ model User {
   requestsMade     Request[] @relation("requestsMade")
   requestsAssigned Request[] @relation("requestsAssigned")
   requestsApproved Request[] @relation("requestsApproved")
+  assetsCheckedOut AssetCheckout[]
 
 }
 
@@ -57,20 +58,42 @@ model Request {
   requestDateTime   DateTime
   returnDateTime    DateTime
   notes        String?
-  assigned_to_user_id   Int
-  assigned_to_user      User   @relation(fields: [assigned_to_user_id], references: [id], name: "requestsAssigned")
-  approved_by_user_id   Int
-  approved_by_user      User   @relation(fields: [approved_by_user_id], references: [id], name: "requestsApproved")
+  assigned_to_user_id   Int?
+  assigned_to_user      User?   @relation(fields: [assigned_to_user_id], references: [id], name: "requestsAssigned")
+  approved_by_user_id   Int?
+  approved_by_user      User?   @relation(fields: [approved_by_user_id], references: [id], name: "requestsApproved")
+  assets       AssetCheckout[]
 }
 
 model Asset {
   id          Int     @id @default(autoincrement()) @unique
   name        String
   asset_tag  String  @unique
+  serial     String? @unique
+  model      String?
+  location   String?
+  purchase_cost Float?
+  mac_address String?
+  imei        String?
   image       String?
   description String?
   category_id Int
   category  EquipmentCategory @relation(fields: [category_id], references: [id])
+  checkout    AssetCheckout[]
+
+}
+
+model AssetCheckout {
+  id          Int     @id @default(autoincrement()) @unique
+  asset_id    Int
+  asset       Asset   @relation(fields: [asset_id], references: [id])
+  user_id     Int
+  user        User    @relation(fields: [user_id], references: [id])
+  request_id  Int
+  request     Request @relation(fields: [request_id], references: [id])
+  checkout_date DateTime? @default(now())
+  checkin_date  DateTime?
+  notes        String?
 
 }
 

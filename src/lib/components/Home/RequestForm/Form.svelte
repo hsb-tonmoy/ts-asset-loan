@@ -10,7 +10,7 @@
 
 	export let data: PageData;
 
-	const { form, errors, enhance } = superForm(data.form, {
+	const { form, errors, enhance, delayed } = superForm(data.form, {
 		validators: formSchema,
 		dataType: 'json'
 	});
@@ -25,6 +25,28 @@
 		{ label: 'Docking Station', value: 'docking-station' },
 		{ label: 'Other', value: 'other' }
 	];
+
+	let requestDate: string, requestTime: string, returnDate: string, returnTime: string;
+
+	const convertDateTime = (dateString: string, timeString: string) => {
+		const date = new Date(dateString + 'T00:00:00');
+
+		const [hours, minutes] = timeString.split(':').map(Number);
+
+		date.setHours(hours, minutes, 0, 0);
+
+		return date;
+	};
+
+	$: {
+		if (requestDate && requestTime) {
+			$form.requestDateTime = convertDateTime(requestDate, requestTime).toISOString();
+		}
+
+		if (returnDate && returnTime) {
+			$form.returnDateTime = convertDateTime(returnDate, returnTime).toISOString();
+		}
+	}
 </script>
 
 <form method="POST" use:enhance class="grid grid-cols-6 gap-4 text-gray-800">
@@ -35,7 +57,7 @@
 			id="category"
 			multiple
 			items={categories}
-			bind:value={$form.category}
+			bind:value={$form.requestedCategories}
 			valueFieldName="value"
 			labelFieldName="label"
 			showClear={true}
@@ -82,30 +104,30 @@
 
 	<div class="flex flex-col gap-4 col-span-3">
 		<Label for="requestDate">Request Date</Label>
-		<Input type="date" name="requestDate" id="requestDate" bind:value={$form.requestDate} />
-		{#if $errors.requestDate}
+		<Input type="date" name="requestDate" id="requestDate" bind:value={requestDate} />
+		{#if $errors.requestDateTime}
 			<span class="text-sm font-medium text-destructive dark:text-red-600"
-				>{$errors.requestDate}</span
+				>{$errors.requestDateTime}</span
 			>
 		{/if}
 	</div>
 
 	<div class="flex flex-col gap-4 col-span-3">
 		<Label for="requestTime">Request Time</Label>
-		<Input type="time" name="requestTime" id="requestTime" bind:value={$form.requestTime} />
-		{#if $errors.requestTime}
+		<Input type="time" name="requestTime" id="requestTime" bind:value={requestTime} />
+		{#if $errors.requestDateTime}
 			<span class="text-sm font-medium text-destructive dark:text-red-600"
-				>{$errors.requestTime}</span
+				>{$errors.requestDateTime}</span
 			>
 		{/if}
 	</div>
 
 	<div class="flex flex-col gap-4 col-span-3">
 		<Label for="returnDate">Return Date</Label>
-		<Input type="date" name="returnDate" id="returnDate" bind:value={$form.returnDate} />
-		{#if $errors.returnDate}
+		<Input type="date" name="returnDate" id="returnDate" bind:value={returnDate} />
+		{#if $errors.returnDateTime}
 			<span class="text-sm font-medium text-destructive dark:text-red-600"
-				>{$errors.returnDate}</span
+				>{$errors.returnDateTime}</span
 			>
 		{/if}
 	</div>
@@ -116,12 +138,12 @@
 			type="time"
 			name="returnTime"
 			id="returnTime"
-			bind:value={$form.returnTime}
+			bind:value={returnTime}
 			class="w-auto min-w-[300px]"
 		/>
-		{#if $errors.returnTime}
+		{#if $errors.requestDateTime}
 			<span class="text-sm font-medium text-destructive dark:text-red-600"
-				>{$errors.returnTime}</span
+				>{$errors.returnDateTime}</span
 			>
 		{/if}
 	</div>
@@ -141,7 +163,7 @@
 		{/if}
 	</div>
 
-	<Button type="submit" class="self-start">Submit</Button>
+	<Button type="submit" class="self-start" loading={$delayed}>Submit</Button>
 </form>
 
 <style lang="postcss">
