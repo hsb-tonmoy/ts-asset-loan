@@ -12,7 +12,7 @@
 </script>
 
 <div class="flex gap-6">
-	<div class="bg-white dark:bg-[#18181C] w-9/12 p-4">
+	<div class="bg-white dark:bg-[#18181C] w-full p-4">
 		{#if action === 'add'}
 			<Form {data} />
 		{:else if !isNaN(+action)}

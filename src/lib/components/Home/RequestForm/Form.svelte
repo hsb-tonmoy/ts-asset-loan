@@ -7,12 +7,29 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import AutoComplete from '$lib/components/ui/autocomplete/AutoComplete.svelte';
 	import type { PageData } from '../../../../routes/(root)/$types';
+	import { toast } from 'svoast';
 
 	export let data: PageData;
 
+	export let success: boolean = false;
+
 	const { form, errors, enhance, delayed } = superForm(data.form, {
 		validators: formSchema,
-		dataType: 'json'
+		dataType: 'json',
+		onUpdated: ({ form }) => {
+			if (form.valid) {
+				toast.success(`Request successfully submitted`, {
+					closable: true
+				});
+				success = true;
+			}
+		},
+		onError: ({ result }) => {
+			toast.error('Something went wrong!', {
+				closable: true
+			});
+			console.log(result.error.message);
+		}
 	});
 
 	const categories = [

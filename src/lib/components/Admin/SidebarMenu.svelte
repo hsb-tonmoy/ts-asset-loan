@@ -39,7 +39,7 @@
 		{
 			name: 'Requests',
 			icon: ClipboardList,
-			link: '/admin',
+			link: '/admin/request/list',
 			submenu: [
 				{
 					name: 'Add Request',
