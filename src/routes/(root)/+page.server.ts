@@ -6,7 +6,13 @@ import { error, fail } from '@sveltejs/kit';
 import prisma from '$lib/prisma';
 
 export const load: PageServerLoad = async () => {
+	const categories = await prisma.equipmentCategory.findMany({
+		include: {
+			assets: true
+		}
+	});
 	return {
+		categories,
 		form: superValidate(formSchema)
 	};
 };

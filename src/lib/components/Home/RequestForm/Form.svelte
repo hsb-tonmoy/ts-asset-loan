@@ -13,6 +13,8 @@
 
 	export let success: boolean = false;
 
+	const categories = data.categories;
+
 	const { form, errors, enhance, delayed } = superForm(data.form, {
 		validators: formSchema,
 		dataType: 'json',
@@ -31,17 +33,6 @@
 			console.log(result.error.message);
 		}
 	});
-
-	const categories = [
-		{ label: 'Laptop', value: 'laptop' },
-		{ label: 'Monitor', value: 'monitor' },
-		{ label: 'Keyboard', value: 'keyboard' },
-		{ label: 'Mouse', value: 'mouse' },
-		{ label: 'Headset', value: 'headset' },
-		{ label: 'Webcam', value: 'webcam' },
-		{ label: 'Docking Station', value: 'docking-station' },
-		{ label: 'Other', value: 'other' }
-	];
 
 	let requestDate: string, requestTime: string, returnDate: string, returnTime: string;
 
@@ -64,28 +55,54 @@
 			$form.returnDateTime = convertDateTime(returnDate, returnTime).toISOString();
 		}
 	}
+
+	let selectedCategories: any[] = [];
+	let assetRequests: { [categoryName: string]: number } = {};
+
+	$: {
+		selectedCategories.forEach((category) => {
+			if (assetRequests[category.name] === undefined) {
+				assetRequests[category.name] = 0;
+			}
+		});
+	}
+
+	$: {
+		$form.requestedCategories = JSON.stringify(assetRequests);
+	}
+
+	function updateRequestedAssets(categoryName: string, value: number) {
+		assetRequests[categoryName] = value;
+	}
 </script>
 
 <form method="POST" use:enhance class="grid grid-cols-6 gap-4 text-gray-800">
 	<div class="flex flex-col gap-4 col-span-6">
 		<Label for="category" class="block">Type of Equipment</Label>
 		<AutoComplete
-			name="category"
-			id="category"
 			multiple
 			items={categories}
-			bind:value={$form.requestedCategories}
-			valueFieldName="value"
-			labelFieldName="label"
+			bind:selectedItem={selectedCategories}
+			valueFieldName="id"
+			labelFieldName="name"
 			showClear={true}
 			className="w-full"
 		/>
-
-		<!-- {#if $errors.category}
-			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.category}</span>
-		{/if} -->
 	</div>
-
+	{#each selectedCategories as category (category.id)}
+		<div class="flex gap-4 col-span-6 w-full">
+			<div class="w-1/4"><Label>{category.name} ({category.assets.length})</Label></div>
+			<div class="w-3/4">
+				<Input
+					type="number"
+					min="0"
+					max={category.assets.length}
+					bind:value={assetRequests[category.name]}
+					on:input={(event) => updateRequestedAssets(category.name, +event.target.value)}
+				/>
+			</div>
+		</div>
+	{/each}
 	<div class="flex flex-col gap-4 col-span-3">
 		<Label for="firstName">First Name</Label>
 		<Input type="text" name="firstName" id="firstName" bind:value={$form.firstName} />

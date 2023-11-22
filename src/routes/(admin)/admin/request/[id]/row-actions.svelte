@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
 	import { enhance, applyAction } from '$app/forms';
-	import { Trash2, Pencil } from 'lucide-svelte';
+	import { Trash2, GanttChartSquare } from 'lucide-svelte';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import Button from '$lib/components/ui/button/button.svelte';
 	export let row: any;
@@ -28,7 +28,7 @@
 	class="inline-flex items-center gap-2"
 >
 	<Button href="/admin/asset/{row.id}" variant="outline" size="icon">
-		<Pencil class="w-4 h-4" />
+		<GanttChartSquare class="w-4 h-4" />
 	</Button>
 	<AlertDialog.Root>
 		<AlertDialog.Trigger asChild let:builder>

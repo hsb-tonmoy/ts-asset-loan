@@ -25,7 +25,7 @@
 			style="box-shadow: 0 4px 16px 4px rgba(0, 0, 0, 0.3)"
 			class="order-1 xl:order-2 flex flex-col justify-center items-center {success
 				? 'w-full bg-green-700'
-				: 'bg-[#3B82F6] dark:bg-[#2e5ba3] w-full xl:w-[40%]'} py-6 xl:py-0 xl:-my-6 transition-all duration-500 ease-linear"
+				: 'bg-[#3B82F6] dark:bg-[#2e5ba3] w-full xl:w-[40%]'} py-6 xl:py-0 xl:-my-6 transition-all duration-300 ease-in-out"
 		>
 			{#if success}
 				<SuccessPage />

@@ -15,11 +15,12 @@
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 
+	import RequestedAssets from './requested-assets.svelte';
 	import RowActions from './row-actions.svelte';
 	import RowCheckbox from './row-checkbox.svelte';
 	import ColumnVisibility from './column-visibility.svelte';
 
-	import { convertToImageURL } from '$lib/utils';
+	import { convertToImageURL, formatDateTime } from '$lib/utils';
 
 	export let data: Request[];
 
@@ -63,14 +64,19 @@
 			cell: (info) => info.getValue()
 		},
 		{
+			accessorKey: 'requestedCategories',
+			header: 'Requested Equipments',
+			cell: (info) => flexRender(RequestedAssets, { info: info })
+		},
+		{
 			accessorKey: 'requestDateTime',
 			header: 'Request Date',
-			cell: (info) => info.getValue()
+			cell: (info) => formatDateTime(info.getValue() as string)
 		},
 		{
 			accessorKey: 'returnDateTime',
 			header: 'Return Date',
-			cell: (info) => info.getValue()
+			cell: (info) => formatDateTime(info.getValue() as string)
 		},
 		{
 			accessorKey: 'status.name',

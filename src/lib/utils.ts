@@ -65,3 +65,20 @@ export const convertToImageURL = (file: string) => {
 
 	return '';
 };
+
+export const formatDateTime = (dateTimeString: string) => {
+	const date = new Date(dateTimeString);
+
+	const formattedDate = date.toLocaleDateString('en-US', {
+		year: '2-digit',
+		month: '2-digit',
+		day: '2-digit'
+	});
+
+	const formattedTime = date.toLocaleTimeString('en-US', {
+		hour: 'numeric',
+		hour12: true
+	});
+
+	return `${formattedDate} at ${formattedTime}`;
+};
