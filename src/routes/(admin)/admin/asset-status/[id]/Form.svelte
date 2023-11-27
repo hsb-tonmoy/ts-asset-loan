@@ -24,7 +24,7 @@
 				toast.success(`Status ${edit ? 'updated' : 'added'} successfully`, {
 					closable: true
 				});
-				goto('/admin/status/list');
+				goto('/admin/asset-status/list');
 			}
 		},
 		onError: ({ result }) => {
@@ -34,6 +34,12 @@
 			console.log(result.error.message);
 		}
 	});
+
+	if (edit) {
+		statusColor.value = data.status.statusColor;
+	}
+
+	console.log(statusColor);
 
 	$: {
 		$form.statusColor = statusColor.value;

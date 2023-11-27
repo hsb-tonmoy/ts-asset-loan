@@ -19,7 +19,8 @@ model User {
   requestsMade     Request[] @relation("requestsMade")
   requestsAssigned Request[] @relation("requestsAssigned")
   requestsApproved Request[] @relation("requestsApproved")
-  assetsCheckedOut AssetCheckout[]
+  assetsCheckedOut AssetCheckout[] @relation("checkedOutByUser")
+  assetsCheckoutApproved   AssetCheckout[] @relation("approvedByUser")
 
 }
 
@@ -69,6 +70,8 @@ model Asset {
   id          Int     @id @default(autoincrement()) @unique
   name        String
   asset_tag  String  @unique
+  status_id   Int
+  status      AssetStatus @relation(fields: [status_id], references: [id])
   serial     String? @unique
   model      String?
   location   String?
@@ -78,29 +81,41 @@ model Asset {
   image       String?
   description String?
   category_id Int
-  category  EquipmentCategory @relation(fields: [category_id], references: [id])
+  category  AssetCategory @relation(fields: [category_id], references: [id])
   checkout    AssetCheckout[]
 
 }
 
 model AssetCheckout {
   id          Int     @id @default(autoincrement()) @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt @default(now())
   asset_id    Int
   asset       Asset   @relation(fields: [asset_id], references: [id])
   user_id     Int
-  user        User    @relation(fields: [user_id], references: [id])
+  user        User    @relation(fields: [user_id], references: [id], name: "checkedOutByUser")
   request_id  Int
   request     Request @relation(fields: [request_id], references: [id])
   checkout_date DateTime? @default(now())
   checkin_date  DateTime?
+  approved_by_user_id Int?
+  approved_by_user    User?   @relation(fields: [approved_by_user_id], references: [id], name: "approvedByUser")
   notes        String?
 
 }
 
-model EquipmentCategory {
+model AssetCategory {
   id          Int     @id @default(autoincrement()) @unique
   name        String  @unique
   image       String?
+  description String?
+  assets      Asset[]
+}
+
+model AssetStatus {
+  id          Int     @id @default(autoincrement()) @unique
+  name        String  @unique
+  statusColor String? @default("rgb(235, 64, 52)")
   description String?
   assets      Asset[]
 }

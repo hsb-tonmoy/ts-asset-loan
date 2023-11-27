@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ params }) => {
 			status: null
 		};
 	} else if (id === 'list') {
-		const statuses = await prisma.requestStatus.findMany({
+		const statuses = await prisma.assetStatus.findMany({
 			orderBy: {
 				id: 'asc'
 			}
@@ -24,7 +24,7 @@ export const load: PageServerLoad = async ({ params }) => {
 			statuses
 		};
 	} else if (!isNaN(Number(id))) {
-		const status = await prisma.requestStatus.findUnique({
+		const status = await prisma.assetStatus.findUnique({
 			where: {
 				id: Number(id)
 			}
@@ -56,7 +56,7 @@ export const actions: Actions = {
 
 	// 	if (formData.has('delete') && id) {
 	// 		try {
-	// 			await prisma.requestStatus.delete({
+	// 			await prisma.assetStatus.delete({
 	// 				where: {
 	// 					id
 	// 				}
@@ -72,7 +72,7 @@ export const actions: Actions = {
 
 	// 	if (id) {
 	// 		try {
-	// 			await prisma.requestStatus.update({
+	// 			await prisma.assetStatus.update({
 	// 				where: {
 	// 					id: Number(formData.get('id'))
 	// 				},
@@ -91,7 +91,7 @@ export const actions: Actions = {
 	// 		return message(form, 'Status successfully updated');
 	// 	} else {
 	// 		try {
-	// 			await prisma.requestStatus.create({
+	// 			await prisma.assetStatus.create({
 	// 				data: {
 	// 					name: form.data.name,
 	// 					description: form.data.description,
@@ -114,7 +114,7 @@ export const actions: Actions = {
 		if (!form.valid) return fail(400, { form });
 
 		try {
-			await prisma.requestStatus.create({
+			await prisma.assetStatus.create({
 				data: {
 					name: form.data.name,
 					description: form.data.description,
@@ -137,7 +137,7 @@ export const actions: Actions = {
 		if (!form.valid) return fail(400, { form });
 
 		try {
-			await prisma.requestStatus.update({
+			await prisma.assetStatus.update({
 				where: {
 					id: Number(id)
 				},
@@ -162,7 +162,7 @@ export const actions: Actions = {
 		if (!form.valid) return fail(400, { form });
 
 		try {
-			await prisma.requestStatus.delete({
+			await prisma.assetStatus.delete({
 				where: {
 					id: Number(formData.get('id'))
 				}

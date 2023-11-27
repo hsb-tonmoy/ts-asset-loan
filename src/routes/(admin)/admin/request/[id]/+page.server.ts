@@ -8,7 +8,7 @@ import prisma from '$lib/prisma';
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
 
-	const categories = await prisma.equipmentCategory.findMany({
+	const categories = await prisma.assetCategory.findMany({
 		orderBy: {
 			name: 'asc'
 		}

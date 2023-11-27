@@ -6,7 +6,6 @@
 		ClipboardList,
 		MonitorSmartphone,
 		Monitor,
-		ClipboardEdit,
 		Cog,
 		BadgeHelp,
 		ChevronDown
@@ -82,24 +81,19 @@
 			]
 		},
 		{
-			name: 'Statuses',
-			icon: ClipboardEdit,
-			link: '/admin/status/list',
-			submenu: [
-				{
-					name: 'Add Status',
-					link: '/admin/status/add'
-				},
-				{
-					name: 'List Statuses',
-					link: '/admin/status/list'
-				}
-			]
-		},
-		{
 			name: 'Settings',
 			icon: Cog,
-			link: '/admin'
+			link: '/admin',
+			submenu: [
+				{
+					name: 'Asset Status',
+					link: '/admin/asset-status/list'
+				},
+				{
+					name: 'Request Status',
+					link: '/admin/request-status/list'
+				}
+			]
 		},
 		{
 			name: 'Help',

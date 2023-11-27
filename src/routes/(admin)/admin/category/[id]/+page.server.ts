@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ params, url }) => {
 			category: null
 		};
 	} else if (id === 'list') {
-		const categories = await prisma.equipmentCategory.findMany({
+		const categories = await prisma.assetCategory.findMany({
 			orderBy: {
 				id: 'asc'
 			},
@@ -33,7 +33,7 @@ export const load: PageServerLoad = async ({ params, url }) => {
 			categories
 		};
 	} else if (!isNaN(Number(id))) {
-		const category = await prisma.equipmentCategory.findUnique({
+		const category = await prisma.assetCategory.findUnique({
 			where: {
 				id: Number(id)
 			}
@@ -62,7 +62,7 @@ export const actions: Actions = {
 		const filePath = await saveFile(formData);
 
 		try {
-			await prisma.equipmentCategory.create({
+			await prisma.assetCategory.create({
 				data: {
 					name: form.data.name,
 					image: filePath,
@@ -85,7 +85,7 @@ export const actions: Actions = {
 		if (!form.valid) return fail(400, { form });
 
 		try {
-			const existingCategory = await prisma.equipmentCategory.findUnique({
+			const existingCategory = await prisma.assetCategory.findUnique({
 				where: {
 					id: Number(id)
 				}
@@ -102,7 +102,7 @@ export const actions: Actions = {
 				filePath = await saveFile(formData);
 			}
 
-			await prisma.equipmentCategory.update({
+			await prisma.assetCategory.update({
 				where: {
 					id: Number(id)
 				},
@@ -130,7 +130,7 @@ export const actions: Actions = {
 		const id = formData.get('id');
 
 		try {
-			const existingCategory = await prisma.equipmentCategory.findUnique({
+			const existingCategory = await prisma.assetCategory.findUnique({
 				where: {
 					id: Number(id)
 				}
@@ -147,7 +147,7 @@ export const actions: Actions = {
 		}
 
 		try {
-			await prisma.equipmentCategory.delete({
+			await prisma.assetCategory.delete({
 				where: {
 					id: Number(id)
 				}

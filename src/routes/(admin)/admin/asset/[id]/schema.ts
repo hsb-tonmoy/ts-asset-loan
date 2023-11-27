@@ -11,6 +11,7 @@ export const formSchema = z.object({
 	mac_address: z.string().optional().nullable(),
 	imei: z.string().optional().nullable(),
 	category: z.number().min(1, { message: 'You must choose a category' }),
+	status: z.number().min(1, { message: 'You must choose a status' }),
 	image: z.string().optional().nullable(),
 	description: z.string().optional().nullable()
 });

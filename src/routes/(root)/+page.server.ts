@@ -6,7 +6,7 @@ import { error, fail } from '@sveltejs/kit';
 import prisma from '$lib/prisma';
 
 export const load: PageServerLoad = async () => {
-	const categories = await prisma.equipmentCategory.findMany({
+	const categories = await prisma.assetCategory.findMany({
 		include: {
 			assets: true
 		}

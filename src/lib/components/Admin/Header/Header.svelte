@@ -21,7 +21,7 @@
 <div class="flex justify-between items-center px-3 text-neutral-400 ml-[200px] h-full">
 	<div class="flex items-center gap-2">
 		<Menu class="w-5 h-5 mr-4 text-[#333639]" />
-		<a href="/">
+		<a href="/" target="_blank">
 			<Home class="w-5 h-5 mr-4 text-[#333639]" />
 		</a>
 		<div class="inline-flex items-center gap-3">

@@ -9,18 +9,17 @@
 		renderComponent
 	} from '@tanstack/svelte-table';
 	import type { TableOptions, ColumnDef } from '@tanstack/svelte-table';
-	import type { AssetCategory } from '@prisma/client';
+	import type { AssetStatus } from '@prisma/client';
 
 	import Label from '$lib/components/ui/label/label.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 
 	import RowActions from './row-actions.svelte';
-	import { convertToImageURL } from '$lib/utils';
 
-	export let data: AssetCategory[];
+	export let data: AssetStatus[];
 
-	const defaultColumns: ColumnDef<AssetCategory>[] = [
+	const defaultColumns: ColumnDef<AssetStatus>[] = [
 		{
 			accessorKey: 'id',
 			header: 'ID',
@@ -32,8 +31,8 @@
 			cell: (info) => info.getValue()
 		},
 		{
-			accessorKey: 'image',
-			header: 'Image',
+			accessorKey: 'statusColor',
+			header: 'Status Color',
 			cell: (info) => info.getValue()
 		},
 		{
@@ -59,7 +58,7 @@
 		}));
 	};
 
-	const options = writable<TableOptions<AssetCategory>>({
+	const options = writable<TableOptions<AssetStatus>>({
 		data,
 		columns: defaultColumns,
 		onSortingChange: setSorting,
@@ -69,7 +68,7 @@
 			columnVisibility: {
 				id: true,
 				name: true,
-				image: false
+				statusColor: false
 			}
 		}
 	});
@@ -106,7 +105,7 @@
 	<div class="flex justify-between items-center my-4">
 		<Button
 			class="bg-blue-500 hover:bg-blue-400 text-white px-4 py-1 rounded"
-			href="/admin/category/add"
+			href="/admin/asset-status/add"
 		>
 			<Plus class="h-4 w-4 mr-1" />
 			New
@@ -153,14 +152,10 @@
 						<td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
 							{#if cell.getContext().column.id === 'name'}
 								<div class="inline-flex items-center gap-2">
-									{#if cell.getContext().row.original.image}
-										<img
-											class="w-10 h-10 object-cover"
-											src={convertToImageURL(cell.getContext().row.original.image)}
-											alt={cell.getValue()}
-										/>
-									{/if}
-									{cell.getValue()}
+									<span
+										class="w-4 h-4"
+										style="background-color: {cell.getContext().row.original.statusColor} "
+									/>{cell.getValue()}
 								</div>
 							{:else}
 								<svelte:component

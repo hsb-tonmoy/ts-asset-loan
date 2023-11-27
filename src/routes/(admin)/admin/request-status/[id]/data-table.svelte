@@ -105,7 +105,7 @@
 	<div class="flex justify-between items-center my-4">
 		<Button
 			class="bg-blue-500 hover:bg-blue-400 text-white px-4 py-1 rounded"
-			href="/admin/status/add"
+			href="/admin/request-status/add"
 		>
 			<Plus class="h-4 w-4 mr-1" />
 			New

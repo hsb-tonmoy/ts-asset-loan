@@ -12,14 +12,14 @@
 
 	const baseMenuItems = [
 		{
-			name: 'List all statuses',
+			name: 'List all asset statuses',
 			action: 'list',
-			link: '/admin/status/list'
+			link: '/admin/asset-status/list'
 		},
 		{
-			name: 'Create a new status',
+			name: 'Create a new asset status',
 			action: 'add',
-			link: '/admin/status/add'
+			link: '/admin/asset-status/add'
 		}
 	];
 
@@ -30,7 +30,7 @@
 					{
 						name: `Edit '${data.status?.name}'`,
 						action: action,
-						link: `/admin/status/${action}`
+						link: `/admin/asset-status/${action}`
 					}
 			  ]
 			: [...baseMenuItems];
@@ -38,7 +38,7 @@
 
 <div class="flex gap-6">
 	<div class="flex flex-col bg-white dark:bg-[#18181C] py-4 w-3/12">
-		<h6 class="text-lg px-4 mb-4">Status Settings</h6>
+		<h6 class="text-lg px-4 mb-4">Asset Status Settings</h6>
 		{#each menuItems as item}
 			<a
 				href={item.link}

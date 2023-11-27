@@ -10,7 +10,13 @@ import prisma from '$lib/prisma';
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
 
-	const categories = await prisma.equipmentCategory.findMany({
+	const categories = await prisma.assetCategory.findMany({
+		orderBy: {
+			name: 'asc'
+		}
+	});
+
+	const statuses = await prisma.assetStatus.findMany({
 		orderBy: {
 			name: 'asc'
 		}
@@ -19,14 +25,17 @@ export const load: PageServerLoad = async ({ params }) => {
 	if (id === 'add') {
 		return {
 			categories,
+			statuses,
 			form: superValidate(formSchema),
 			asset: null
 		};
 	} else if (id === 'list') {
 		const assets = await prisma.asset.findMany({
 			include: {
-				category: true
+				category: true,
+				status: true
 			},
+
 			orderBy: {
 				id: 'asc'
 			}
@@ -34,6 +43,7 @@ export const load: PageServerLoad = async ({ params }) => {
 
 		return {
 			categories,
+			statuses,
 			assets
 		};
 	} else if (!isNaN(Number(id))) {
@@ -42,13 +52,15 @@ export const load: PageServerLoad = async ({ params }) => {
 				id: Number(id)
 			},
 			include: {
-				category: true
+				category: true,
+				status: true
 			}
 		});
 
 		if (asset) {
 			return {
 				categories,
+				statuses,
 				form: superValidate(asset, formSchema),
 				asset
 			};
@@ -67,8 +79,6 @@ export const actions: Actions = {
 
 		if (!form.valid) return fail(400, { form });
 
-		console.log(form.data);
-
 		const filePath = await saveFile(formData);
 		try {
 			await prisma.asset.create({
@@ -84,6 +94,9 @@ export const actions: Actions = {
 					imei: form.data.imei,
 					category: {
 						connect: { id: Number(form.data.category) }
+					},
+					status: {
+						connect: { id: form.data.status }
 					},
 					description: form.data.description
 				}

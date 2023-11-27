@@ -20,6 +20,7 @@
 	let uploadedImage: string;
 
 	const categories = data.categories;
+	const statuses = data.statuses;
 
 	const { form, errors, enhance, delayed } = superForm(data.form, {
 		validators: formSchema,
@@ -55,14 +56,21 @@
 	if (edit) uploadedImage = convertToImageURL(data.asset.image);
 
 	let category: any;
+	let status: any;
 
 	if (edit) {
 		category = $form.category;
+		status = $form.status;
 	}
 
 	$: form.update((old) => ({
 		...old,
 		category: category?.id
+	}));
+
+	$: form.update((old) => ({
+		...old,
+		status: status?.id
 	}));
 </script>
 
@@ -99,6 +107,20 @@
 					src={convertToImageURL(item.image)}
 					alt={label}
 				/>{@html label}
+			</div>
+		</div>
+	</AutoComplete>
+	<Label for="status">Asset Status</Label>
+
+	<AutoComplete
+		items={statuses}
+		bind:selectedItem={status}
+		labelFieldName="name"
+		valueFieldName="id"
+		showClear={true}
+		><div slot="item" let:item let:label>
+			<div class="inline-flex items-center gap-2">
+				<span class="w-4 h-4" style="background-color: {item.statusColor} " />{@html label}
 			</div>
 		</div>
 	</AutoComplete>
