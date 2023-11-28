@@ -68,12 +68,15 @@ export const convertToImageURL = (file: string) => {
 
 export const formatDateTime = (dateTimeString: string) => {
 	const date = new Date(dateTimeString);
+	const currentYear = new Date().getFullYear();
 
-	const formattedDate = date.toLocaleDateString('en-US', {
-		year: '2-digit',
-		month: '2-digit',
-		day: '2-digit'
-	});
+	const dateOptions = {
+		year: currentYear === date.getFullYear() ? undefined : 'numeric',
+		month: 'short',
+		day: 'numeric'
+	};
+
+	const formattedDate = date.toLocaleDateString('en-US', dateOptions);
 
 	const formattedTime = date.toLocaleTimeString('en-US', {
 		hour: 'numeric',

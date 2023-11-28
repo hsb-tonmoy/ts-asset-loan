@@ -6,6 +6,7 @@
 	import { formSchema } from './schema';
 	import { superForm } from 'sveltekit-superforms/client';
 	import AutoComplete from '$lib/components/ui/autocomplete/AutoComplete.svelte';
+	import MaskedInput from '$lib/components/ui/input-mask/MaskedInput.svelte';
 	import type { PageData } from '../../../../routes/(root)/$types';
 	import { toast } from 'svoast';
 
@@ -130,7 +131,15 @@
 
 	<div class="flex flex-col gap-4 col-span-3">
 		<Label for="phone">Phone</Label>
-		<Input type="tel" name="phone" id="phone" bind:value={$form.phone} />
+		<MaskedInput
+			id="phone"
+			name="phone"
+			mask="(000) 000 - 0000"
+			size={20}
+			showMask
+			maskChar="_"
+			on:change={({ detail }) => ($form.phone = detail.inputState.unmaskedValue)}
+		/>
 		{#if $errors.phone}
 			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.phone}</span>
 		{/if}
@@ -197,7 +206,9 @@
 		{/if}
 	</div>
 
-	<Button type="submit" class="self-start" loading={$delayed}>Submit</Button>
+	<div class="col-span-6">
+		<Button type="submit" class="w-auto self-start" loading={$delayed}>Submit</Button>
+	</div>
 </form>
 
 <style lang="postcss">

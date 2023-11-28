@@ -24,8 +24,6 @@
 
 	export let data: Request[];
 
-	console.log(data);
-
 	const defaultColumns: ColumnDef<Request>[] = [
 		{
 			id: 'select',

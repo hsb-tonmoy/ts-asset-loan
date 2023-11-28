@@ -45,6 +45,7 @@
 		"clsx": "^2.0.0",
 		"cmdk-sv": "^0.0.6",
 		"formsnap": "^0.4.1",
+		"input-core": "^2.1.0",
 		"lucia": "^2.7.4",
 		"lucide-svelte": "^0.292.0",
 		"mode-watcher": "^0.0.7",

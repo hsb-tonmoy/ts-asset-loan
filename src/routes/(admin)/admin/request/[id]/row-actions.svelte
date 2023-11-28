@@ -27,7 +27,7 @@
 	}}
 	class="inline-flex items-center gap-2"
 >
-	<Button href="/admin/asset/{row.id}" variant="outline" size="icon">
+	<Button href="/admin/request/{row.id}" variant="outline" size="icon">
 		<GanttChartSquare class="w-4 h-4" />
 	</Button>
 	<AlertDialog.Root>
