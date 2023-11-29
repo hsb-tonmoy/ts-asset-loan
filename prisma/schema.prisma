@@ -127,3 +127,10 @@ model RequestStatus {
   description String?
   requests   Request[]
 }
+
+model SiteSettings {
+  id          Int     @id @default(autoincrement()) @unique
+  site_name    String? @default("Kalamazoo Public Library Asset Tracker")
+  site_description String?
+  maintenance_mode       Boolean? @default(false)
+}

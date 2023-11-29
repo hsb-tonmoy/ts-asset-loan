@@ -13,7 +13,9 @@
 
 <Tooltip.Root>
 	<Tooltip.Trigger>
-		<span>{Object.keys(requestedAssets).join(', ')}</span>
+		<span class="decoration-dotted underline underline-offset-4"
+			>{Object.keys(requestedAssets).join(', ')}</span
+		>
 	</Tooltip.Trigger>
 	<Tooltip.Content>
 		<div>{@html tooltipText}</div>

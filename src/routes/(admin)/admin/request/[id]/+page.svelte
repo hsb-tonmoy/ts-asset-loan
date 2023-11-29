@@ -12,15 +12,13 @@
 </script>
 
 <div class="flex gap-6">
-	<div class="bg-white dark:bg-[#18181C] w-full p-4">
-		{#if action === 'add'}
-			<Form {data} />
-		{:else if !isNaN(+action)}
-			<Form {data} edit={true} />
-		{:else if action === 'list' && requests}
-			{#key requests}
-				<DataTable data={requests} />
-			{/key}
-		{/if}
-	</div>
+	{#if action === 'add'}
+		<Form {data} />
+	{:else if !isNaN(+action)}
+		<Form {data} edit={true} />
+	{:else if action === 'list' && requests}
+		{#key requests}
+			<DataTable data={requests} />
+		{/key}
+	{/if}
 </div>

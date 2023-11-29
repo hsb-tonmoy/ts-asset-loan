@@ -175,7 +175,7 @@
 	const table = createSvelteTable(options);
 </script>
 
-<div class="flex flex-col bg-white dark:bg-[#18181C] box-border p-4">
+<div class="flex flex-col bg-white dark:bg-[#18181C] box-border p-4 w-full">
 	<div class="flex items-center gap-6">
 		<div class="inline-flex items-center gap-4">
 			<Label for="name" class="text-sm">Name:</Label>

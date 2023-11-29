@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
-	import { Plus, Trash2, MoveUp, MoveDown } from 'lucide-svelte';
+	import { Plus, MoveUp, MoveDown } from 'lucide-svelte';
 	import {
 		createSvelteTable,
 		flexRender,
@@ -14,18 +14,14 @@
 	import Label from '$lib/components/ui/label/label.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import * as Tooltip from '$lib/components/ui/tooltip';
 
-	import RowActions from './row-actions.svelte';
-	import RowCheckbox from './row-checkbox.svelte';
-	import ColumnVisibility from './column-visibility.svelte';
+	import RowActions from '../row-actions.svelte';
+	import RowCheckbox from '../row-checkbox.svelte';
+	import ColumnVisibility from '../column-visibility.svelte';
 
-	import { copyText } from '$lib/components/ClickToCopy';
 	import { convertToImageURL } from '$lib/utils';
 
 	export let data: Asset[];
-
-	let textCopied: boolean = false;
 
 	const defaultColumns: ColumnDef<Asset>[] = [
 		{
@@ -72,10 +68,6 @@
 		{
 			accessorKey: 'status',
 			header: 'Status'
-		},
-		{
-			id: 'actions',
-			cell: (info) => renderComponent(RowActions, { row: info.row.original })
 		}
 	];
 
@@ -233,48 +225,7 @@
 				<tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
 					{#each row.getVisibleCells() as cell, i}
 						<td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
-							{#if cell.getContext().column.id === 'name'}
-								<div class="inline-flex items-center gap-2">
-									{#if cell.getContext().row.original.image}
-										<img
-											class="w-10 h-10 object-cover"
-											src={convertToImageURL(cell.getContext().row.original.image)}
-											alt={cell.getValue()}
-										/>
-									{/if}
-									{cell.getValue()}
-								</div>
-							{:else if cell.getContext().column.id === 'status'}
-								<div class="inline-flex items-center gap-2">
-									<span class="w-4 h-4" style="background-color: {cell.getValue().statusColor} " />
-									{cell.getValue().name}
-								</div>
-							{:else if cell.getContext().column.id === 'asset_tag'}
-								<Tooltip.Root>
-									<Tooltip.Trigger>
-										<button
-											on:click={() => {
-												copyText(cell.getValue());
-												textCopied = true;
-												setTimeout(() => {
-													textCopied = false;
-												}, 2000);
-											}}
-										>
-											<span class="underline decoration-dotted underline-offset-4"
-												>{cell.getValue()}</span
-											>
-										</button>
-									</Tooltip.Trigger>
-									<Tooltip.Content>
-										<span>{textCopied ? 'Copied!' : 'Click to Copy'}</span>
-									</Tooltip.Content>
-								</Tooltip.Root>
-							{:else}
-								<svelte:component
-									this={flexRender(cell.column.columnDef.cell, cell.getContext())}
-								/>
-							{/if}
+							<svelte:component this={flexRender(cell.column.columnDef.cell, cell.getContext())} />
 						</td>
 					{/each}
 				</tr>

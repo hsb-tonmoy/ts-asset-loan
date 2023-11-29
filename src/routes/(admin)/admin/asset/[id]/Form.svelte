@@ -89,6 +89,7 @@
 		bind:value={$form.asset_tag}
 		class="w-auto min-w-[300px]"
 	/>
+	<p class="text-sm text-muted-foreground">Must be unique</p>
 	{#if $errors.asset_tag}
 		<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.asset_tag}</span>
 	{/if}
@@ -175,6 +176,7 @@
 				bind:value={$form.serial}
 				class="w-auto min-w-[300px]"
 			/>
+			<p class="text-sm text-muted-foreground">Must be unique</p>
 			{#if $errors.serial}
 				<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.serial}</span>
 			{/if}

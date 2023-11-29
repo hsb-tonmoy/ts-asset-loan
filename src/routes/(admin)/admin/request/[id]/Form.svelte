@@ -11,6 +11,8 @@
 	import MaskedInput from '$lib/components/ui/input-mask/MaskedInput.svelte';
 	import AutoComplete from '$lib/components/ui/autocomplete/AutoComplete.svelte';
 
+	import AssetCheckoutForm from './asset-checkout/AssetCheckout.svelte';
+
 	export let data: PageData;
 
 	const { statuses, categories } = data;
@@ -94,132 +96,139 @@
 	}
 </script>
 
-<form
-	method="POST"
-	action={edit ? '?/update' : '?/create'}
-	use:enhance
-	class="flex flex-col gap-4 text-gray-800"
-	enctype="multipart/form-data"
->
-	<Label for="category">Requested Assets</Label>
-	<Input type="text" disabled value={requestedAssets} class="w-auto min-w-[300px]" />
+<section class="flex gap-6 w-full">
+	<form
+		method="POST"
+		action={edit ? '?/update' : '?/create'}
+		use:enhance
+		class="flex flex-col gap-4 text-gray-800 bg-white dark:bg-[#18181C] w-2/3 p-4"
+		enctype="multipart/form-data"
+	>
+		<Label for="category">Requested Assets</Label>
+		<Input type="text" disabled value={requestedAssets} class="w-auto min-w-[300px]" />
 
-	<Label for="status">Request Status</Label>
+		<Label for="status">Request Status</Label>
 
-	<AutoComplete
-		items={statuses}
-		bind:selectedItem={status}
-		labelFieldName="name"
-		valueFieldName="id"
-		showClear={true}
-		><div slot="item" let:item let:label>
-			<div class="inline-flex items-center gap-2">
-				<span class="w-4 h-4" style="background-color: {item.statusColor} " />{@html label}
+		<AutoComplete
+			items={statuses}
+			bind:selectedItem={status}
+			labelFieldName="name"
+			valueFieldName="id"
+			showClear={true}
+			><div slot="item" let:item let:label>
+				<div class="inline-flex items-center gap-2">
+					<span class="w-4 h-4" style="background-color: {item.statusColor} " />{@html label}
+				</div>
 			</div>
-		</div>
-	</AutoComplete>
-	<Label for="firstName">First Name</Label>
-	<Input
-		type="text"
-		name="firstName"
-		id="firstName"
-		bind:value={$form.firstName}
-		class="w-auto min-w-[300px]"
-	/>
-	{#if $errors.firstName}
-		<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.firstName}</span>
-	{/if}
+		</AutoComplete>
+		<Label for="firstName">First Name</Label>
+		<Input
+			type="text"
+			name="firstName"
+			id="firstName"
+			bind:value={$form.firstName}
+			class="w-auto min-w-[300px]"
+		/>
+		{#if $errors.firstName}
+			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.firstName}</span
+			>
+		{/if}
 
-	<Label for="lastName">Last Name</Label>
-	<Input
-		type="text"
-		name="lastName"
-		id="lastName"
-		bind:value={$form.lastName}
-		class="w-auto min-w-[300px]"
-	/>
-	{#if $errors.lastName}
-		<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.lastName}</span>
-	{/if}
+		<Label for="lastName">Last Name</Label>
+		<Input
+			type="text"
+			name="lastName"
+			id="lastName"
+			bind:value={$form.lastName}
+			class="w-auto min-w-[300px]"
+		/>
+		{#if $errors.lastName}
+			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.lastName}</span>
+		{/if}
 
-	<Label for="email">Email</Label>
-	<Input
-		type="email"
-		name="email"
-		id="email"
-		bind:value={$form.email}
-		class="w-auto min-w-[300px]"
-	/>
-	{#if $errors.email}
-		<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.email}</span>
-	{/if}
+		<Label for="email">Email</Label>
+		<Input
+			type="email"
+			name="email"
+			id="email"
+			bind:value={$form.email}
+			class="w-auto min-w-[300px]"
+		/>
+		{#if $errors.email}
+			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.email}</span>
+		{/if}
 
-	<Label for="phone">Phone</Label>
-	<MaskedInput
-		id="phone"
-		name="phone"
-		mask="(000) 000 - 0000"
-		size={20}
-		showMask
-		maskChar="_"
-		value={$form.phone}
-		on:change={({ detail }) => ($form.phone = detail.inputState.unmaskedValue)}
-	/>
-	{#if $errors.phone}
-		<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.phone}</span>
-	{/if}
+		<Label for="phone">Phone</Label>
+		<MaskedInput
+			id="phone"
+			name="phone"
+			mask="(000) 000 - 0000"
+			size={20}
+			showMask
+			maskChar="_"
+			value={$form.phone}
+			on:change={({ detail }) => ($form.phone = detail.inputState.unmaskedValue)}
+		/>
+		{#if $errors.phone}
+			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.phone}</span>
+		{/if}
 
-	<Label for="requestDate">Request Date</Label>
-	<Input type="date" name="requestDate" id="requestDate" bind:value={requestDate} />
-	{#if $errors.requestDateTime}
-		<span class="text-sm font-medium text-destructive dark:text-red-600"
-			>{$errors.requestDateTime}</span
-		>
-	{/if}
+		<Label for="requestDate">Request Date</Label>
+		<Input type="date" name="requestDate" id="requestDate" bind:value={requestDate} />
+		{#if $errors.requestDateTime}
+			<span class="text-sm font-medium text-destructive dark:text-red-600"
+				>{$errors.requestDateTime}</span
+			>
+		{/if}
 
-	<Label for="requestTime">Request Time</Label>
-	<Input type="time" name="requestTime" id="requestTime" bind:value={requestTime} />
-	{#if $errors.requestDateTime}
-		<span class="text-sm font-medium text-destructive dark:text-red-600"
-			>{$errors.requestDateTime}</span
-		>
-	{/if}
+		<Label for="requestTime">Request Time</Label>
+		<Input type="time" name="requestTime" id="requestTime" bind:value={requestTime} />
+		{#if $errors.requestDateTime}
+			<span class="text-sm font-medium text-destructive dark:text-red-600"
+				>{$errors.requestDateTime}</span
+			>
+		{/if}
 
-	<Label for="returnDate">Return Date</Label>
-	<Input type="date" name="returnDate" id="returnDate" bind:value={returnDate} />
-	{#if $errors.returnDateTime}
-		<span class="text-sm font-medium text-destructive dark:text-red-600"
-			>{$errors.returnDateTime}</span
-		>
-	{/if}
+		<Label for="returnDate">Return Date</Label>
+		<Input type="date" name="returnDate" id="returnDate" bind:value={returnDate} />
+		{#if $errors.returnDateTime}
+			<span class="text-sm font-medium text-destructive dark:text-red-600"
+				>{$errors.returnDateTime}</span
+			>
+		{/if}
 
-	<Label for="returnTime">Return Time</Label>
-	<Input
-		type="time"
-		name="returnTime"
-		id="returnTime"
-		bind:value={returnTime}
-		class="w-auto min-w-[300px]"
-	/>
-	{#if $errors.requestDateTime}
-		<span class="text-sm font-medium text-destructive dark:text-red-600"
-			>{$errors.returnDateTime}</span
-		>
-	{/if}
+		<Label for="returnTime">Return Time</Label>
+		<Input
+			type="time"
+			name="returnTime"
+			id="returnTime"
+			bind:value={returnTime}
+			class="w-auto min-w-[300px]"
+		/>
+		{#if $errors.requestDateTime}
+			<span class="text-sm font-medium text-destructive dark:text-red-600"
+				>{$errors.returnDateTime}</span
+			>
+		{/if}
 
-	<Label for="notes">Notes</Label>
+		<Label for="notes">Notes</Label>
 
-	<Textarea
-		name="notes"
-		id="notes"
-		bind:value={$form.notes}
-		placeholder="Add notes..."
-		rows={1}
-		class="w-auto min-w-[300px]"
-	/>
-	{#if $errors.notes}
-		<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.notes}</span>
-	{/if}
+		<Textarea
+			name="notes"
+			id="notes"
+			bind:value={$form.notes}
+			placeholder="Add notes..."
+			rows={1}
+			class="w-auto min-w-[300px]"
+		/>
+		{#if $errors.notes}
+			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.notes}</span>
+		{/if}
 
-	<Button type="submit" class="self-start" loading={$delayed}>Submit</Button>
-</form>
+		<Button type="submit" class="self-start" loading={$delayed}>Submit</Button>
+	</form>
+
+	<div class="bg-white dark:bg-[#18181C] w-1/3 p-4">
+		<AssetCheckoutForm {data} />
+	</div>
+</section>
