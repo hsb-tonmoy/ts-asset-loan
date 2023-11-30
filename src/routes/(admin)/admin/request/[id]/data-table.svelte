@@ -83,7 +83,7 @@
 		},
 		{
 			accessorKey: 'approved_by_user.firstName',
-			header: 'Approved By',
+			header: 'Reviewed By',
 			cell: (info) => info.getValue()
 		},
 		{

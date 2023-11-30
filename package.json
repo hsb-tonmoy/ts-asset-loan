@@ -40,6 +40,7 @@
 	"dependencies": {
 		"@lucia-auth/adapter-prisma": "^3.0.2",
 		"@lucia-auth/oauth": "^3.5.0",
+		"@sendgrid/mail": "^7.7.0",
 		"@tanstack/svelte-table": "^8.10.7",
 		"bits-ui": "^0.9.8",
 		"clsx": "^2.0.0",
@@ -50,6 +51,7 @@
 		"lucide-svelte": "^0.292.0",
 		"mode-watcher": "^0.0.7",
 		"svelecte": "^3.17.2",
+		"svelte-email": "^0.0.4",
 		"sveltekit-superforms": "^1.10.1",
 		"tailwind-merge": "^2.0.0",
 		"tailwind-variants": "^0.1.18",

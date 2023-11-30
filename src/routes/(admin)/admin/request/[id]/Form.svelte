@@ -101,8 +101,7 @@
 		method="POST"
 		action={edit ? '?/update' : '?/create'}
 		use:enhance
-		class="flex flex-col gap-4 text-gray-800 bg-white dark:bg-[#18181C] w-2/3 p-4"
-		enctype="multipart/form-data"
+		class="flex flex-col gap-4 text-gray-800 bg-white dark:bg-[#18181C] w-3/5 p-4"
 	>
 		<Label for="category">Requested Assets</Label>
 		<Input type="text" disabled value={requestedAssets} class="w-auto min-w-[300px]" />
@@ -228,7 +227,7 @@
 		<Button type="submit" class="self-start" loading={$delayed}>Submit</Button>
 	</form>
 
-	<div class="bg-white dark:bg-[#18181C] w-1/3 p-4">
-		<AssetCheckoutForm {data} />
+	<div class="bg-white dark:bg-[#18181C] w-2/5 p-4">
+		<AssetCheckoutForm data={data.assets} />
 	</div>
 </section>

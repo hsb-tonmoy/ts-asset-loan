@@ -23,7 +23,7 @@
 		{
 			name: 'Users',
 			icon: User,
-			link: '/admin',
+			link: '#',
 			submenu: [
 				{
 					name: 'Add User',
@@ -83,7 +83,7 @@
 		{
 			name: 'Settings',
 			icon: Cog,
-			link: '/admin',
+			link: '#',
 			submenu: [
 				{
 					name: 'Asset Status',
@@ -98,7 +98,7 @@
 		{
 			name: 'Help',
 			icon: BadgeHelp,
-			link: '/admin'
+			link: '#'
 		}
 	];
 </script>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
-	import { Plus, MoveUp, MoveDown } from 'lucide-svelte';
+	import { MoveUp, MoveDown } from 'lucide-svelte';
 	import {
 		createSvelteTable,
 		flexRender,
@@ -11,15 +11,8 @@
 	import type { TableOptions, ColumnDef, RowSelectionState } from '@tanstack/svelte-table';
 	import type { Asset } from '@prisma/client';
 
-	import Label from '$lib/components/ui/label/label.svelte';
-	import Input from '$lib/components/ui/input/input.svelte';
-	import Button from '$lib/components/ui/button/button.svelte';
-
-	import RowActions from '../row-actions.svelte';
 	import RowCheckbox from '../row-checkbox.svelte';
 	import ColumnVisibility from '../column-visibility.svelte';
-
-	import { convertToImageURL } from '$lib/utils';
 
 	export let data: Asset[];
 
@@ -45,14 +38,15 @@
 			header: 'ID',
 			cell: (info) => info.getValue()
 		},
-		{
-			accessorKey: 'category.name',
-			header: 'Category',
-			cell: (info) => info.getValue()
-		},
+
 		{
 			accessorKey: 'asset_tag',
 			header: 'Asset Tag',
+			cell: (info) => info.getValue()
+		},
+		{
+			accessorKey: 'category.name',
+			header: 'Category',
 			cell: (info) => info.getValue()
 		},
 		{
@@ -110,7 +104,9 @@
 	};
 
 	let columnVisibility = {
-		image: false
+		image: false,
+		id: false,
+		status: false
 	};
 
 	const setColumnVisibility = (updater) => {
@@ -154,40 +150,8 @@
 </script>
 
 <div class="flex flex-col bg-white dark:bg-[#18181C] box-border p-4">
-	<div class="flex items-center gap-6">
-		<div class="inline-flex items-center gap-4">
-			<Label for="name" class="text-sm">Name:</Label>
-			<Input
-				id="name"
-				name="name"
-				class="w-48 h-9 rounded bg-white dark:bg-[#303033] text-black dark:text-white"
-			/>
-		</div>
-		<div class="inline-flex items-center gap-4">
-			<Label for="color" class="text-sm">Color:</Label>
-			<Input
-				id="color"
-				name="color"
-				class="w-48 h-9 rounded bg-white dark:bg-[#303033] text-black dark:text-white"
-			/>
-		</div>
-	</div>
-	<div class="flex justify-between items-center my-4">
-		<Button
-			class="bg-blue-500 hover:bg-blue-400 text-white px-4 py-1 rounded"
-			href="/admin/asset/add"
-		>
-			<Plus class="h-4 w-4 mr-1" />
-			New
-		</Button>
-		<div class="inline-flex items-center gap-4">
-			{#if Object.keys(selection).length > 0}
-				<div class="inline-flex items-center pr-2">
-					<Trash2 class="w-5 h-5" />
-				</div>
-			{/if}
-			<ColumnVisibility {table} />
-		</div>
+	<div class="flex items-center gap-6 mb-4">
+		<h6 class="text-lg">Checkout Assets</h6>
 	</div>
 
 	<table class="w-full whitespace-no-wrap border border-input text-sm">

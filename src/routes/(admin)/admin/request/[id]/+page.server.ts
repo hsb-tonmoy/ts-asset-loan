@@ -59,9 +59,19 @@ export const load: PageServerLoad = async ({ params }) => {
 			}
 		});
 
+		const assets = await prisma.asset.findMany({
+			orderBy: {
+				name: 'asc'
+			},
+			include: {
+				category: true
+			}
+		});
+
 		if (request) {
 			return {
 				categories,
+				assets,
 				statuses,
 				form: superValidate(request, formSchema),
 				request
