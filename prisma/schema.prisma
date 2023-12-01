@@ -8,11 +8,12 @@ generator client {
 }
 
 model User {
-  id           Int    @id @default(autoincrement()) @unique
+  id           String    @id @default(cuid()) @unique
   email       String    @unique
   firstName        String?
   lastName         String?
   role             String?
+  username         String? @unique
 
   auth_session Session[]
   key          Key[]
@@ -26,7 +27,7 @@ model User {
 
 model Session {
   id             String @id @unique
-  user_id        Int
+  user_id        String
   active_expires BigInt
   idle_expires   BigInt
   user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
@@ -37,7 +38,7 @@ model Session {
 model Key {
   id              String  @id @unique
   hashed_password String?
-  user_id         Int
+  user_id         String
   user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id])
@@ -45,7 +46,7 @@ model Key {
 
 model Request {
   id             Int     @id @default(autoincrement()) @unique
-  user_id        Int?
+  user_id        String?
   user           User?   @relation(fields: [user_id], references: [id], name: "requestsMade")
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt @default(now())
@@ -59,9 +60,9 @@ model Request {
   requestDateTime   DateTime
   returnDateTime    DateTime
   notes        String?
-  assigned_to_user_id   Int?
+  assigned_to_user_id   String?
   assigned_to_user      User?   @relation(fields: [assigned_to_user_id], references: [id], name: "requestsAssigned")
-  approved_by_user_id   Int?
+  approved_by_user_id   String?
   approved_by_user      User?   @relation(fields: [approved_by_user_id], references: [id], name: "requestsApproved")
   assets       AssetCheckout[]
 }
@@ -92,13 +93,13 @@ model AssetCheckout {
   updatedAt   DateTime @updatedAt @default(now())
   asset_id    Int
   asset       Asset   @relation(fields: [asset_id], references: [id])
-  user_id     Int
+  user_id     String
   user        User    @relation(fields: [user_id], references: [id], name: "checkedOutByUser")
   request_id  Int
   request     Request @relation(fields: [request_id], references: [id])
   checkout_date DateTime? @default(now())
   checkin_date  DateTime?
-  approved_by_user_id Int?
+  approved_by_user_id String?
   approved_by_user    User?   @relation(fields: [approved_by_user_id], references: [id], name: "approvedByUser")
   notes        String?
 

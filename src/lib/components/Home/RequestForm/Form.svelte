@@ -35,6 +35,12 @@
 		}
 	});
 
+	if (data.user) {
+		$form.firstName = data.user.firstName;
+		$form.lastName = data.user.lastName;
+		$form.email = data.user.email;
+	}
+
 	let requestDate: string, requestTime: string, returnDate: string, returnTime: string;
 
 	const convertDateTime = (dateString: string, timeString: string) => {
@@ -106,7 +112,13 @@
 	{/each}
 	<div class="flex flex-col gap-4 col-span-3">
 		<Label for="firstName">First Name</Label>
-		<Input type="text" name="firstName" id="firstName" bind:value={$form.firstName} />
+		<Input
+			type="text"
+			name="firstName"
+			id="firstName"
+			disabled={data.user}
+			bind:value={$form.firstName}
+		/>
 		{#if $errors.firstName}
 			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.firstName}</span
 			>
@@ -115,7 +127,13 @@
 
 	<div class="flex flex-col gap-4 col-span-3">
 		<Label for="lastName">Last Name</Label>
-		<Input type="text" name="lastName" id="lastName" bind:value={$form.lastName} />
+		<Input
+			type="text"
+			name="lastName"
+			id="lastName"
+			disabled={data.user}
+			bind:value={$form.lastName}
+		/>
 		{#if $errors.lastName}
 			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.lastName}</span>
 		{/if}
@@ -123,7 +141,7 @@
 
 	<div class="flex flex-col gap-4 col-span-3">
 		<Label for="email">Email</Label>
-		<Input type="email" name="email" id="email" bind:value={$form.email} />
+		<Input type="email" name="email" id="email" disabled={data.user} bind:value={$form.email} />
 		{#if $errors.email}
 			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.email}</span>
 		{/if}

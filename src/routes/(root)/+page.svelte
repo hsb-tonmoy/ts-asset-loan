@@ -18,7 +18,7 @@
 		class="md:max-w-3xl lg:max-w-4xl xl:max-w-screen-2xl w-full p-0 flex flex-col xl:flex-row h-full xl:max-h-[45rem] rounded-3 border-0 bg-white dark:bg-[#18181B]"
 	>
 		<div id="menu" class="order-2 xl:order-1 flex flex-col items-center w-full xl:w-[10%] py-12">
-			<Menu />
+			<Menu user={data.user} />
 		</div>
 		<div
 			id="description"
@@ -30,7 +30,7 @@
 			{#if success}
 				<SuccessPage />
 			{:else}
-				<Description />
+				<Description user={data.user} />
 			{/if}
 		</div>
 		{#if !success}

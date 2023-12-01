@@ -1,12 +1,18 @@
 <script lang="ts">
 	import { Gauge, User, HelpCircle } from 'lucide-svelte';
 
+	export let user: any;
+
 	const menuItems = [
-		{
-			name: 'Login',
-			icon: User,
-			link: '/auth/login'
-		},
+		...(user
+			? []
+			: [
+					{
+						name: 'Login',
+						icon: User,
+						link: '/auth/login'
+					}
+			  ]),
 		{
 			name: 'Dashboard',
 			icon: Gauge,

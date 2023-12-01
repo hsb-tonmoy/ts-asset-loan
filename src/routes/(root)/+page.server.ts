@@ -5,12 +5,21 @@ import { error, fail } from '@sveltejs/kit';
 
 import prisma from '$lib/prisma';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
+	const session = await locals.auth.validate();
+
 	const categories = await prisma.assetCategory.findMany({
 		include: {
 			assets: true
 		}
 	});
+	if (session) {
+		return {
+			categories,
+			form: superValidate(formSchema),
+			user: session.user
+		};
+	}
 	return {
 		categories,
 		form: superValidate(formSchema)
