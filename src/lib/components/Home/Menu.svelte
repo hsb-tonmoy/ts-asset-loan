@@ -1,11 +1,17 @@
 <script lang="ts">
-	import { Gauge, User, HelpCircle } from 'lucide-svelte';
+	import { Gauge, User, HelpCircle, LogOut } from 'lucide-svelte';
 
 	export let user: any;
 
 	const menuItems = [
 		...(user
-			? []
+			? [
+					{
+						name: 'Logout',
+						icon: LogOut,
+						link: '/auth/logout'
+					}
+			  ]
 			: [
 					{
 						name: 'Login',
