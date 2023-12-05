@@ -1,7 +1,23 @@
 import { PrismaClient } from '@prisma/client';
+import { auth } from '../src/lib/server/lucia';
+// import { SUPERADMIN_EMAIL, SUPERADMIN_PASSWORD } from '$env/static/private';
+
+const { SUPERADMIN_EMAIL, SUPERADMIN_PASSWORD } = process.env;
+
 const prisma = new PrismaClient();
 
 async function main() {
+	await auth.createUser({
+		key: {
+			providerId: 'email',
+			providerUserId: SUPERADMIN_EMAIL.toLowerCase(),
+			password: SUPERADMIN_PASSWORD
+		},
+		attributes: {
+			email: SUPERADMIN_PASSWORD.toLowerCase(),
+			role: 'Admin'
+		}
+	});
 	await prisma.assetStatus.create({
 		data: {
 			name: 'Requestable',
