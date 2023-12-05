@@ -2,34 +2,7 @@
 	import { Gauge, User, HelpCircle, LogOut } from 'lucide-svelte';
 
 	export let user: any;
-
-	const menuItems = [
-		...(user
-			? [
-					{
-						name: 'Logout',
-						icon: LogOut,
-						link: '/auth/logout'
-					}
-			  ]
-			: [
-					{
-						name: 'Login',
-						icon: User,
-						link: '/auth/login'
-					}
-			  ]),
-		{
-			name: 'Dashboard',
-			icon: Gauge,
-			link: '/admin'
-		},
-		{
-			name: 'Help',
-			icon: HelpCircle,
-			link: '/auth/login'
-		}
-	];
+	export let login: boolean = false;
 </script>
 
 <div class="flex flex-col w-full">
@@ -40,15 +13,41 @@
 		>
 	</div>
 	<ul class="flex justify-center xl:justify-start xl:flex-col w-full gap-6 xl:gap-16">
-		{#each menuItems as menuItem}
+		{#if !user}
 			<li
 				class="flex justify-center shrink border-0 text-[#b0b0b0] hover:text-black hover:dark:text-white hover:border-l-[6px] border-amber-600 transition-all duration-150 ease-in-out"
 			>
-				<a href={menuItem.link} class="inline-flex flex-col items-center gap-1">
-					<svelte:component this={menuItem.icon} />
-					<span class="text-sm tracking-wide text-center">{menuItem.name}</span>
+				<button on:click={() => (login = true)} class="inline-flex flex-col items-center gap-1">
+					<User />
+					<span class="text-sm tracking-wide text-center">Login</span>
+				</button>
+			</li>
+		{/if}
+		<li
+			class="flex justify-center shrink border-0 text-[#b0b0b0] hover:text-black hover:dark:text-white hover:border-l-[6px] border-amber-600 transition-all duration-150 ease-in-out"
+		>
+			<a href="/admin" class="inline-flex flex-col items-center gap-1">
+				<Gauge />
+				<span class="text-sm tracking-wide text-center">Dashboard</span>
+			</a>
+		</li>
+		<li
+			class="flex justify-center shrink border-0 text-[#b0b0b0] hover:text-black hover:dark:text-white hover:border-l-[6px] border-amber-600 transition-all duration-150 ease-in-out"
+		>
+			<a href="/auth/login" class="inline-flex flex-col items-center gap-1">
+				<HelpCircle />
+				<span class="text-sm tracking-wide text-center">Help</span>
+			</a>
+		</li>
+		{#if user}
+			<li
+				class="flex justify-center shrink border-0 text-[#b0b0b0] hover:text-black hover:dark:text-white hover:border-l-[6px] border-amber-600 transition-all duration-150 ease-in-out"
+			>
+				<a href="/auth/login" class="inline-flex flex-col items-center gap-1">
+					<LogOut />
+					<span class="text-sm tracking-wide text-center">Logout</span>
 				</a>
 			</li>
-		{/each}
+		{/if}
 	</ul>
 </div>

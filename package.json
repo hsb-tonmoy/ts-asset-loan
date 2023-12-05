@@ -40,7 +40,7 @@
 	"dependencies": {
 		"@lucia-auth/adapter-prisma": "^3.0.2",
 		"@lucia-auth/oauth": "^3.5.0",
-		"@sendgrid/mail": "^6.5.5",
+		"@sendgrid/mail": "^7.7.0",
 		"@tanstack/svelte-table": "^8.10.7",
 		"bits-ui": "^0.9.8",
 		"clsx": "^2.0.0",

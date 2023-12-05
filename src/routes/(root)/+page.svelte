@@ -1,5 +1,6 @@
 <script lang="ts">
-	import Form from '$lib/components/Home/RequestForm/Form.svelte';
+	import RequestForm from '$lib/components/Home/RequestForm/Form.svelte';
+	import LoginForm from '$lib/components/Home/LoginForm/Form.svelte';
 	import Description from './../../lib/components/Home/Description.svelte';
 	import SuccessPage from '$lib/components/Home/SuccessPage.svelte';
 	import Menu from '$lib/components/Home/Menu.svelte';
@@ -8,6 +9,7 @@
 	export let data: PageData;
 
 	let success: boolean = false;
+	let login: boolean = false;
 </script>
 
 <main
@@ -18,7 +20,7 @@
 		class="md:max-w-3xl lg:max-w-4xl xl:max-w-screen-2xl w-full p-0 flex flex-col xl:flex-row h-full xl:max-h-[45rem] rounded-3 border-0 bg-white dark:bg-[#18181B]"
 	>
 		<div id="menu" class="order-2 xl:order-1 flex flex-col items-center w-full xl:w-[10%] py-12">
-			<Menu user={data.user} />
+			<Menu user={data.user} bind:login />
 		</div>
 		<div
 			id="description"
@@ -36,9 +38,15 @@
 		{#if !success}
 			<div
 				id="requestForm"
-				class="order-3 flex flex-col items-center w-full xl:w-[50%] xl:overflow-auto px-10 py-10"
+				class="order-3 flex flex-col items-center {login
+					? 'justify-center'
+					: ''} w-full xl:w-[50%] xl:overflow-auto px-10 py-10"
 			>
-				<Form {data} bind:success />
+				{#if login}
+					<LoginForm />
+				{:else}
+					<RequestForm {data} bind:success />
+				{/if}
 			</div>
 		{/if}
 	</div>
