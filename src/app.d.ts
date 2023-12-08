@@ -17,6 +17,7 @@ declare global {
 			username: string;
 			firstName: string;
 			lastName: string;
+			role: string;
 		};
 		type DatabaseSessionAttributes = Record<string, never>;
 	}

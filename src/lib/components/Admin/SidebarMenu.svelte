@@ -23,17 +23,7 @@
 		{
 			name: 'Users',
 			icon: User,
-			link: '#',
-			submenu: [
-				{
-					name: 'Add User',
-					link: '/admin/user/add'
-				},
-				{
-					name: 'List Users',
-					link: '/admin/user/list'
-				}
-			]
+			link: '/admin/users/list'
 		},
 		{
 			name: 'Requests',

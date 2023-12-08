@@ -36,9 +36,15 @@
 	});
 
 	if (data.user) {
-		$form.firstName = data.user.firstName;
-		$form.lastName = data.user.lastName;
-		$form.email = data.user.email;
+		form.update(
+			($form) => {
+				$form.firstName = data.user.firstName;
+				$form.lastName = data.user.lastName;
+				$form.email = data.user.email;
+				return $form;
+			},
+			{ taint: false }
+		);
 	}
 
 	let requestDate: string, requestTime: string, returnDate: string, returnTime: string;
@@ -74,8 +80,14 @@
 		});
 	}
 
-	$: {
-		$form.requestedCategories = JSON.stringify(assetRequests);
+	$: if (assetRequests) {
+		form.update(
+			($form) => {
+				$form.requestedCategories = JSON.stringify(assetRequests);
+				return $form;
+			},
+			{ taint: false }
+		);
 	}
 
 	function updateRequestedAssets(categoryName: string, value: number) {

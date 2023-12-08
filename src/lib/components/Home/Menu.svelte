@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Gauge, User, HelpCircle, LogOut } from 'lucide-svelte';
+	import { goto } from '$app/navigation';
+	import { Gauge, User, HelpCircle, LogOut, Home } from 'lucide-svelte';
 
 	export let user: any;
 	export let login: boolean = false;
@@ -13,13 +14,31 @@
 		>
 	</div>
 	<ul class="flex justify-center xl:justify-start xl:flex-col w-full gap-6 xl:gap-16">
-		{#if !user}
+		{#if !user && !login}
 			<li
 				class="flex justify-center shrink border-0 text-[#b0b0b0] hover:text-black hover:dark:text-white hover:border-l-[6px] border-amber-600 transition-all duration-150 ease-in-out"
 			>
-				<button on:click={() => (login = true)} class="inline-flex flex-col items-center gap-1">
+				<button
+					on:click={() => goto('/?login=true')}
+					class="inline-flex flex-col items-center gap-1"
+				>
 					<User />
 					<span class="text-sm tracking-wide text-center">Login</span>
+				</button>
+			</li>
+		{:else if login}
+			<li
+				class="flex justify-center shrink border-0 text-[#b0b0b0] hover:text-black hover:dark:text-white hover:border-l-[6px] border-amber-600 transition-all duration-150 ease-in-out"
+			>
+				<button
+					on:click={() => {
+						login = false;
+						goto('/');
+					}}
+					class="inline-flex flex-col items-center gap-1"
+				>
+					<Home />
+					<span class="text-sm tracking-wide text-center">Home</span>
 				</button>
 			</li>
 		{/if}
@@ -43,7 +62,7 @@
 			<li
 				class="flex justify-center shrink border-0 text-[#b0b0b0] hover:text-black hover:dark:text-white hover:border-l-[6px] border-amber-600 transition-all duration-150 ease-in-out"
 			>
-				<a href="/auth/login" class="inline-flex flex-col items-center gap-1">
+				<a href="/auth/logout" class="inline-flex flex-col items-center gap-1">
 					<LogOut />
 					<span class="text-sm tracking-wide text-center">Logout</span>
 				</a>

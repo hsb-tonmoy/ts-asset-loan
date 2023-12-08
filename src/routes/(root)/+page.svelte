@@ -15,6 +15,8 @@
 
 	$: if ($page.url.searchParams.has('login')) {
 		login = true;
+	} else {
+		login = false;
 	}
 </script>
 

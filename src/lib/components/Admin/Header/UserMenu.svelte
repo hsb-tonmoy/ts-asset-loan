@@ -11,7 +11,7 @@
 			<DropdownMenu.Label class="text-sm">Account Options</DropdownMenu.Label>
 			<DropdownMenu.Separator />
 			<DropdownMenu.Item class="text-sm">Profile</DropdownMenu.Item>
-			<DropdownMenu.Item class="text-sm">Log Out</DropdownMenu.Item>
+			<DropdownMenu.Item href="/auth/logout" class="text-sm">Log Out</DropdownMenu.Item>
 		</DropdownMenu.Group>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>
