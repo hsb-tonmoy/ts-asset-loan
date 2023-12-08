@@ -53,6 +53,7 @@ export const load: PageServerLoad = async ({ params }) => {
 				id: Number(id)
 			},
 			include: {
+				user: true,
 				status: true,
 				approved_by_user: true,
 				assets: true
@@ -120,21 +121,30 @@ export const actions: Actions = {
 	// 	}
 	// 	return message(form, 'request successfully created');
 	// },
-	update: async ({ request, params }) => {
+	update: async ({ request, params, locals }) => {
 		const { id } = params;
 		const formData = await request.formData();
 		const form = await superValidate(formData, formSchema);
 
-		console.log(form.data);
-
 		if (!form.valid) return fail(400, { form });
+
+		const session = await locals.auth.validate();
 
 		try {
 			await prisma.request.update({
 				where: {
 					id: Number(id)
 				},
-				data: form.data
+				data: {
+					...form.data,
+					...(session && {
+						approved_by_user: {
+							connect: {
+								id: session.user?.userId
+							}
+						}
+					})
+				}
 			});
 		} catch (err) {
 			console.log(err);

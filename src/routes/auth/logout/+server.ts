@@ -8,11 +8,13 @@ export const GET: RequestHandler = async ({ locals }) => {
 			status: 401
 		});
 	await auth.invalidateSession(session.sessionId);
+	const sessionCookie = auth.createSessionCookie(null);
 	locals.auth.setSession(null);
 	return new Response(null, {
 		status: 302,
 		headers: {
-			Location: '/'
+			Location: '/',
+			'Set-Cookie': sessionCookie.serialize()
 		}
 	});
 };

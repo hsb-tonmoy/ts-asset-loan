@@ -19,14 +19,14 @@
 	{#if action === 'add'}
 		<Form {data} />
 	{:else if !isNaN(+action)}
-		<div class="text-gray-800 bg-white dark:bg-[#18181C] w-3/5 p-4">
+		<div class="text-gray-800 bg-white dark:bg-[#18181C] w-2/4 p-4">
 			{#if edit}
 				<Form {data} {edit} />
 			{:else}
 				<RequestPreview {data} />
 			{/if}
 		</div>
-		<div class="bg-white dark:bg-[#18181C] w-2/5 p-4">
+		<div class="bg-white dark:bg-[#18181C] w-2/4 p-4">
 			<AssetCheckout data={data.assets} />
 		</div>
 	{:else if action === 'list' && requests}

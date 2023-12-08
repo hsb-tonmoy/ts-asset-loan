@@ -53,7 +53,14 @@
 	class="flex flex-col gap-4 text-gray-800"
 >
 	<Label for="name">Name</Label>
-	<Input type="text" name="name" id="name" bind:value={$form.name} class="w-auto min-w-[300px]" />
+	<Input
+		type="text"
+		name="name"
+		id="name"
+		bind:value={$form.name}
+		disabled={$form.name === 'Requestable'}
+		class="w-auto min-w-[300px]"
+	/>
 	{#if $errors.name}
 		<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.name}</span>
 	{/if}

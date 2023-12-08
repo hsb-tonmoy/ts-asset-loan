@@ -12,7 +12,7 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"@prisma/client": "^5.6.0",
+		"@prisma/client": "^5.7.0",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.20.4",
 		"@types/node": "^20.9.2",
@@ -26,7 +26,7 @@
 		"postcss-load-config": "^4.0.1",
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.10.1",
-		"prisma": "^5.6.0",
+		"prisma": "^5.7.0",
 		"svelte": "^4.0.5",
 		"svelte-check": "^3.4.3",
 		"svelte-headless-table": "^0.17.7",
@@ -40,7 +40,7 @@
 	"dependencies": {
 		"@lucia-auth/adapter-prisma": "^3.0.2",
 		"@lucia-auth/oauth": "^3.5.0",
-		"@sendgrid/mail": "^7.7.0",
+		"@sendgrid/mail": "^8.1.0",
 		"@tanstack/svelte-table": "^8.10.7",
 		"bits-ui": "^0.9.8",
 		"clsx": "^2.0.0",

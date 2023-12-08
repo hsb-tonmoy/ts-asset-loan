@@ -28,25 +28,35 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
 	default: async (event) => {
+		const form = await superValidate(event, formSchema);
+
+		if (!form.valid) return fail(400, { form });
+
 		const status = await prisma.requestStatus.findFirst({
 			where: {
 				name: 'Pending'
 			}
 		});
-		const form = await superValidate(event, formSchema);
 
-		if (!form.valid) return fail(400, { form });
+		const session = await event.locals.auth.validate();
 
 		try {
 			await prisma.request.create({
 				data: {
 					...form.data,
-					requestedCategories: JSON.stringify(form.data.requestedCategories),
+					requestedCategories: form.data.requestedCategories,
 					status: {
 						connect: {
 							id: status?.id
 						}
-					}
+					},
+					...(session && {
+						user: {
+							connect: {
+								id: session.user?.userId
+							}
+						}
+					})
 				}
 			});
 		} catch (err) {

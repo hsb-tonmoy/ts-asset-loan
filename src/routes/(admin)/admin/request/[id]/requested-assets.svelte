@@ -2,7 +2,7 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	export let info: any;
 
-	const requestedAssets = JSON.parse(JSON.parse(info.getValue()));
+	const requestedAssets = JSON.parse(info.getValue());
 
 	let tooltipText = '';
 

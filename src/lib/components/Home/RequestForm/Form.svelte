@@ -41,6 +41,7 @@
 				$form.firstName = data.user.firstName;
 				$form.lastName = data.user.lastName;
 				$form.email = data.user.email;
+
 				return $form;
 			},
 			{ taint: false }
