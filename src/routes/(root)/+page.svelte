@@ -1,15 +1,21 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+
+	import type { PageData } from './$types';
 	import RequestForm from '$lib/components/Home/RequestForm/Form.svelte';
 	import LoginForm from '$lib/components/Home/LoginForm/Form.svelte';
 	import Description from './../../lib/components/Home/Description.svelte';
 	import SuccessPage from '$lib/components/Home/SuccessPage.svelte';
 	import Menu from '$lib/components/Home/Menu.svelte';
-	import type { PageData } from './$types';
 
 	export let data: PageData;
 
 	let success: boolean = false;
 	let login: boolean = false;
+
+	$: if ($page.url.searchParams.has('login')) {
+		login = true;
+	}
 </script>
 
 <main
