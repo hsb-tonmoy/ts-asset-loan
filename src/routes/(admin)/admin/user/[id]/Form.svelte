@@ -4,7 +4,6 @@
 	import { Label } from '$lib/components/ui/label';
 	import { Input } from '$lib/components/ui/input';
 	import * as Select from '$lib/components/ui/select';
-	import { Textarea } from '$lib/components/ui/textarea';
 	import { Button } from '$lib/components/ui/button';
 	import { formSchema } from './schema';
 	import { toast } from 'svoast';
@@ -18,7 +17,7 @@
 				toast.success(`User updated successfully`, {
 					closable: true
 				});
-				goto('/admin/users/list');
+				goto('/admin/user/list');
 			}
 		},
 		onError: ({ result }) => {
@@ -28,9 +27,24 @@
 			console.log(result.error.message);
 		}
 	});
+
+	let selectedRole = {
+		value: $form.role,
+		label: $form.role === 'admin' ? 'Admin' : 'Staff'
+	};
+
+	$: {
+		$form.role = selectedRole.value;
+	}
 </script>
 
-<form method="POST" action="?/update" use:enhance class="flex flex-col gap-4 text-gray-800">
+<form
+	method="POST"
+	action="?/update"
+	enctype="multipart/form-data"
+	use:enhance
+	class="flex flex-col gap-4 text-gray-800"
+>
 	<Label for="firstName">First Name</Label>
 	<Input
 		type="text"
@@ -68,7 +82,7 @@
 	{/if}
 
 	<Label for="role">Role</Label>
-	<Select.Root portal={null}>
+	<Select.Root portal={null} bind:selected={selectedRole}>
 		<Select.Trigger class="w-[180px]">
 			<Select.Value placeholder="Select a role" />
 		</Select.Trigger>

@@ -45,7 +45,6 @@
 		"bits-ui": "^0.9.8",
 		"clsx": "^2.0.0",
 		"cmdk-sv": "^0.0.6",
-		"formsnap": "^0.4.1",
 		"input-core": "^2.1.0",
 		"lucia": "^2.7.4",
 		"lucide-svelte": "^0.292.0",
@@ -57,8 +56,5 @@
 		"tailwind-variants": "^0.1.18",
 		"ts-node": "^10.9.1",
 		"zod": "^3.22.4"
-	},
-	"prisma": {
-		"seed": "ts-node prisma/seed.ts"
 	}
 }

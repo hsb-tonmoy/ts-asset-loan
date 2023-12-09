@@ -7,6 +7,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { goto } from '$app/navigation';
+	import { toast } from 'svoast';
 
 	let email: string = '';
 	let password: string = '';
@@ -19,9 +20,26 @@
 		sso = false;
 	}
 
-	const handleSubmit = (e: Event) => {
+	const handleSubmit = async (e: Event) => {
 		e.preventDefault();
 		if (sso) goto('/auth/login/redirect');
+		else {
+			const res = await fetch('/auth/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ email, password })
+			});
+			if (res.ok) {
+				goto('/admin');
+			} else {
+				const responseText = await res.text();
+				toast.error(responseText, {
+					closable: true
+				});
+			}
+		}
 	};
 </script>
 

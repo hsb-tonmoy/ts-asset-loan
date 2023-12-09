@@ -23,7 +23,7 @@
 		{
 			name: 'Users',
 			icon: User,
-			link: '/admin/users/list'
+			link: '/admin/user/list'
 		},
 		{
 			name: 'Requests',

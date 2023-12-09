@@ -27,7 +27,7 @@
 	}}
 	class="inline-flex items-center gap-2"
 >
-	<Button href="/admin/users/{row.id}" variant="outline" size="icon">
+	<Button href="/admin/user/{row.id}" variant="outline" size="icon">
 		<Pencil class="w-4 h-4" />
 	</Button>
 	{#if row.role !== 'admin'}

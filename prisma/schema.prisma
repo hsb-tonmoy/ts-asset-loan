@@ -12,7 +12,7 @@ model User {
   email       String    @unique
   firstName        String?
   lastName         String?
-  role             String?
+  role             String? @default("staff")
   username         String? @unique
 
   auth_session Session[]
