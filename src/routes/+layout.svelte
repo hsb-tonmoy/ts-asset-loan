@@ -1,13 +1,14 @@
 <script>
+	import '../app.postcss';
 	import { Toasts } from 'svoast';
 	import { ModeWatcher } from 'mode-watcher';
-	import '../app.postcss';
+	import Loading from '$lib/Loading.svelte';
 </script>
 
 <svelte:head>
 	<title>KPL Asset Management</title>
 </svelte:head>
-
+<Loading />
 <Toasts position="top-center" />
 <ModeWatcher />
 <slot />
