@@ -21,9 +21,9 @@
 	{:else if !isNaN(+action)}
 		<div class="text-gray-800 bg-white dark:bg-[#18181C] w-2/4 p-4">
 			{#if edit}
-				<Form {data} {edit} />
+				<Form {data} bind:edit />
 			{:else}
-				<RequestPreview {data} />
+				<RequestPreview bind:edit {data} />
 			{/if}
 		</div>
 		<div class="bg-white dark:bg-[#18181C] w-2/4 p-4">

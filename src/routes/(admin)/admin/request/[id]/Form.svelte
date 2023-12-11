@@ -10,8 +10,7 @@
 	import type { PageData } from './$types';
 	import MaskedInput from '$lib/components/ui/input-mask/MaskedInput.svelte';
 	import AutoComplete from '$lib/components/ui/autocomplete/AutoComplete.svelte';
-
-	import AssetCheckoutForm from './asset-checkout/AssetCheckout.svelte';
+	import { GanttChartSquare, Pencil } from 'lucide-svelte';
 
 	export let data: PageData;
 
@@ -43,9 +42,7 @@
 
 	if (edit) {
 		status = $form.status;
-		for (const [key, value] of Object.entries(
-			JSON.parse(JSON.parse(data.request?.requestedCategories))
-		)) {
+		for (const [key, value] of Object.entries(JSON.parse(data.request?.requestedCategories))) {
 			requestedAssets += `${value} ${key}, `;
 		}
 	}
@@ -96,7 +93,10 @@
 	}
 </script>
 
-<section class="flex gap-6 w-full">
+<section class="relative flex gap-6 w-full">
+	<button type="button" class="absolute w-8 h-8 top-2 right-2" on:click={() => (edit = !edit)}
+		><GanttChartSquare class="w-4 h-4" /></button
+	>
 	<form
 		method="POST"
 		action={edit ? '?/update' : '?/create'}

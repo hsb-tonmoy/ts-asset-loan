@@ -82,9 +82,15 @@
 	}
 
 	$: if (assetRequests) {
+		let filteredAssetRequests: { [categoryName: string]: number } = {};
+		for (let key in assetRequests) {
+			if (assetRequests[key] !== 0) {
+				filteredAssetRequests[key] = assetRequests[key];
+			}
+		}
 		form.update(
 			($form) => {
-				$form.requestedCategories = JSON.stringify(assetRequests);
+				$form.requestedCategories = JSON.stringify(filteredAssetRequests);
 				return $form;
 			},
 			{ taint: false }

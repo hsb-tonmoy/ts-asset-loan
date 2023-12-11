@@ -128,16 +128,19 @@ export const actions: Actions = {
 			let filePath = existingAsset?.image;
 
 			const newImage = formData.get('image');
-			if (newImage instanceof Blob && newImage.size > 0) {
-				if (existingAsset?.image) {
-					await deleteFile(existingAsset.image);
-				}
-				filePath = await saveFile(formData);
-			} else if (!newImage || newImage === '') {
-				// Check if newImage is empty and delete the existing file
-				if (existingAsset?.image) {
-					await deleteFile(existingAsset.image);
-					filePath = null; // Set filePath to null or empty string
+			if (newImage instanceof Blob) {
+				if (newImage.size > 0) {
+					// A new image has been provided
+					if (existingAsset?.image) {
+						await deleteFile(existingAsset.image);
+					}
+					filePath = await saveFile(formData);
+				} else {
+					// The user wants to delete the image
+					if (existingAsset?.image) {
+						await deleteFile(existingAsset.image);
+					}
+					filePath = null;
 				}
 			}
 
@@ -210,11 +213,19 @@ export const actions: Actions = {
 };
 
 async function saveFile(formData: FormData) {
+	const imageFile = formData.get('image') as File;
+	if (!imageFile) return;
+
+	const originalFileName = imageFile.name;
+	const fileExtension = originalFileName.split('.').pop();
+
+	if (!fileExtension) return;
+
 	const filePath = path.join(
 		'static',
 		'uploads',
-		'assets',
-		`${crypto.randomUUID()}.${(formData.get('image') as Blob).type.split('/')[1]}`
+		'categories',
+		`${crypto.randomUUID()}.${fileExtension}`
 	);
 
 	const dir = path.dirname(filePath);
@@ -222,7 +233,7 @@ async function saveFile(formData: FormData) {
 	await fs.mkdir(dir, { recursive: true });
 
 	try {
-		await fs.writeFile(filePath, Buffer.from(await (formData.get('image') as Blob).arrayBuffer()));
+		await fs.writeFile(filePath, Buffer.from(await imageFile.arrayBuffer()));
 		return filePath;
 	} catch (err) {
 		console.log(err);
@@ -233,7 +244,7 @@ async function saveFile(formData: FormData) {
 }
 
 async function deleteFile(filePath: string) {
-	const basePath = path.join('static', 'uploads', 'assets');
+	const basePath = path.join('static', 'uploads', 'categories');
 
 	const relativeFilePath = path.relative(basePath, filePath);
 	const resolvedPath = path.resolve(basePath, relativeFilePath);
@@ -247,6 +258,6 @@ async function deleteFile(filePath: string) {
 		await fs.unlink(resolvedPath);
 	} catch (err) {
 		console.error(`Error deleting file at ${resolvedPath}:`, err);
-		throw error(500, 'File deletion failed');
+		return;
 	}
 }

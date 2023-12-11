@@ -94,12 +94,20 @@ export const actions: Actions = {
 			let filePath = existingCategory?.image;
 
 			const newImage = formData.get('image');
-			if (newImage && newImage instanceof Blob && newImage.size > 0) {
-				if (existingCategory?.image) {
-					await deleteFile(existingCategory.image);
+			if (newImage instanceof Blob) {
+				if (newImage.size > 0) {
+					// A new image has been provided
+					if (existingCategory?.image) {
+						await deleteFile(existingCategory.image);
+					}
+					filePath = await saveFile(formData);
+				} else {
+					// The user wants to delete the image
+					if (existingCategory?.image) {
+						await deleteFile(existingCategory.image);
+					}
+					filePath = null;
 				}
-
-				filePath = await saveFile(formData);
 			}
 
 			await prisma.assetCategory.update({
@@ -163,11 +171,19 @@ export const actions: Actions = {
 };
 
 async function saveFile(formData: FormData) {
+	const imageFile = formData.get('image') as File;
+	if (!imageFile) return;
+
+	const originalFileName = imageFile.name;
+	const fileExtension = originalFileName.split('.').pop();
+
+	if (!fileExtension) return;
+
 	const filePath = path.join(
 		'static',
 		'uploads',
 		'categories',
-		`${crypto.randomUUID()}.${(formData.get('image') as Blob).type.split('/')[1]}`
+		`${crypto.randomUUID()}.${fileExtension}`
 	);
 
 	const dir = path.dirname(filePath);
@@ -175,7 +191,7 @@ async function saveFile(formData: FormData) {
 	await fs.mkdir(dir, { recursive: true });
 
 	try {
-		await fs.writeFile(filePath, Buffer.from(await (formData.get('image') as Blob).arrayBuffer()));
+		await fs.writeFile(filePath, Buffer.from(await imageFile.arrayBuffer()));
 		return filePath;
 	} catch (err) {
 		console.log(err);
@@ -200,6 +216,6 @@ async function deleteFile(filePath: string) {
 		await fs.unlink(resolvedPath);
 	} catch (err) {
 		console.error(`Error deleting file at ${resolvedPath}:`, err);
-		throw error(500, 'File deletion failed');
+		return;
 	}
 }

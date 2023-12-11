@@ -103,11 +103,10 @@
 		showClear={true}
 		><div slot="item" let:item let:label>
 			<div class="inline-flex items-center gap-2">
-				<img
-					class="w-10 h-10 object-cover"
-					src={convertToImageURL(item.image)}
-					alt={label}
-				/>{@html label}
+				{#if item.image}
+					<img class="w-10 h-10 object-cover" src={convertToImageURL(item.image)} alt={label} />
+				{/if}
+				{@html label}
 			</div>
 		</div>
 	</AutoComplete>
