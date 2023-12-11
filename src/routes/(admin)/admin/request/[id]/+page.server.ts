@@ -137,6 +137,11 @@ export const actions: Actions = {
 				},
 				data: {
 					...form.data,
+					status: {
+						connect: {
+							id: Number(form.data.status)
+						}
+					},
 					...(session && {
 						approved_by_user: {
 							connect: {

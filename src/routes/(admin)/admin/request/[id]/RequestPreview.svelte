@@ -52,46 +52,43 @@
 
 <div class="relative flex flex-col gap-10 py-4">
 	<button class="absolute w-8 h-8 top-2 right-2" on:click={() => (edit = !edit)}
-		><Pencil class="w-4 h-4" /></button
+		><Pencil class="w-4 h-4 dark:text-gray-300" /></button
 	>
 	<div class="flex flex-col gap-2">
-		<h6 class="text-base">Requester Details</h6>
+		<h6 class="text-base dark:text-gray-400">Requester Details</h6>
 		<div class="grid grid-cols-3 gap-6">
 			{#each requesterDetails as detail}
 				<div class="inline-flex flex-col gap-2">
-					<Label class="font-semibold">{detail.label}</Label>
+					<Label class="font-semibold text-[#b0b0b0]">{detail.label}</Label>
 					<Label class="inline-flex items-center gap-1">{detail.value}</Label>
 				</div>
 			{/each}
 		</div>
 	</div>
 	<div class="flex flex-col gap-2">
-		<h6 class="text-base">Request Details</h6>
+		<h6 class="text-base dark:text-gray-400">Request Details</h6>
 		<div class="grid grid-cols-3 gap-6">
 			<div class="inline-flex flex-col gap-2">
-				<Label class="font-semibold">Request Status</Label>
+				<Label class="font-semibold text-[#b0b0b0]">Request Status</Label>
 				<Label class="inline-flex items-center gap-1" style="color: {request?.status.statusColor};">
 					{request?.status.name}</Label
 				>
 			</div>
 			<div class="inline-flex flex-col gap-2 col-span-2">
-				<Label class="font-semibold">Requested Equipments</Label>
+				<Label class="font-semibold text-[#b0b0b0]">Requested Equipments</Label>
 				<Label class="inline-flex items-center gap-1">{@html requestedEquipments}</Label>
 			</div>
 			<div class="inline-flex flex-col gap-2">
-				<Label class="font-semibold">Request Date & Time</Label>
+				<Label class="font-semibold text-[#b0b0b0]">Request Date & Time</Label>
 				<Label class="inline-flex items-center gap-1">{formatDate(request?.requestDateTime)}</Label>
 			</div>
 			<div class="inline-flex flex-col gap-2">
-				<Label class="font-semibold">Return Date & Time</Label>
+				<Label class="font-semibold text-[#b0b0b0]">Return Date & Time</Label>
 				<Label class="inline-flex items-center gap-1">{formatDate(request?.returnDateTime)}</Label>
 			</div>
-			<div class="inline-flex flex-col gap-2">
-				<Label class="font-semibold">Return Date & Time</Label>
-				<Label class="inline-flex items-center gap-1">{formatDate(request?.returnDateTime)}</Label>
-			</div>
+
 			<div class="inline-flex flex-col gap-2 col-span-3">
-				<Label class="font-semibold">Notes</Label>
+				<Label class="font-semibold text-[#b0b0b0]">Notes</Label>
 				<Label class="inline-flex items-center gap-1">{request?.notes && request?.notes}</Label>
 			</div>
 		</div>

@@ -91,17 +91,24 @@
 			$form.returnDateTime = convertDateTime(returnDate, returnTime).toISOString();
 		}
 	}
+
+	$: form.update((old) => ({
+		...old,
+		status: status?.id
+	}));
+
+	$: console.log($form);
 </script>
 
-<section class="relative flex gap-6 w-full">
+<section class="relative flex gap-6 w-full py-4">
 	<button type="button" class="absolute w-8 h-8 top-2 right-2" on:click={() => (edit = !edit)}
-		><GanttChartSquare class="w-4 h-4" /></button
+		><GanttChartSquare class="w-4 h-4 dark:text-gray-300" /></button
 	>
 	<form
 		method="POST"
 		action={edit ? '?/update' : '?/create'}
 		use:enhance
-		class="flex flex-col gap-4"
+		class="flex flex-col gap-4 w-full"
 	>
 		<Label for="category">Requested Assets</Label>
 		<Input type="text" disabled value={requestedAssets} class="w-auto min-w-[300px]" />
