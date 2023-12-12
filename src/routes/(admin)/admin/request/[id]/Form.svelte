@@ -127,43 +127,47 @@
 				</div>
 			</div>
 		</AutoComplete>
-		<Label for="firstName">First Name</Label>
-		<Input
-			type="text"
-			name="firstName"
-			id="firstName"
-			bind:value={$form.firstName}
-			class="w-auto min-w-[300px]"
-		/>
-		{#if $errors.firstName}
-			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.firstName}</span
-			>
-		{/if}
+		{#if !data.request?.user}
+			<Label for="firstName">First Name</Label>
+			<Input
+				type="text"
+				name="firstName"
+				id="firstName"
+				bind:value={$form.firstName}
+				class="w-auto min-w-[300px]"
+			/>
+			{#if $errors.firstName}
+				<span class="text-sm font-medium text-destructive dark:text-red-600"
+					>{$errors.firstName}</span
+				>
+			{/if}
 
-		<Label for="lastName">Last Name</Label>
-		<Input
-			type="text"
-			name="lastName"
-			id="lastName"
-			bind:value={$form.lastName}
-			class="w-auto min-w-[300px]"
-		/>
-		{#if $errors.lastName}
-			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.lastName}</span>
-		{/if}
+			<Label for="lastName">Last Name</Label>
+			<Input
+				type="text"
+				name="lastName"
+				id="lastName"
+				bind:value={$form.lastName}
+				class="w-auto min-w-[300px]"
+			/>
+			{#if $errors.lastName}
+				<span class="text-sm font-medium text-destructive dark:text-red-600"
+					>{$errors.lastName}</span
+				>
+			{/if}
 
-		<Label for="email">Email</Label>
-		<Input
-			type="email"
-			name="email"
-			id="email"
-			bind:value={$form.email}
-			class="w-auto min-w-[300px]"
-		/>
-		{#if $errors.email}
-			<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.email}</span>
+			<Label for="email">Email</Label>
+			<Input
+				type="email"
+				name="email"
+				id="email"
+				bind:value={$form.email}
+				class="w-auto min-w-[300px]"
+			/>
+			{#if $errors.email}
+				<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.email}</span>
+			{/if}
 		{/if}
-
 		<Label for="phone">Phone</Label>
 		<MaskedInput
 			id="phone"
