@@ -6,7 +6,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	const limit = parseInt(url.searchParams.get('limit') || '10');
 	const offset = parseInt(url.searchParams.get('offset') || '0');
 
-	const statuses = await prisma.assetStatus.findMany({
+	const statuses = await prisma.assetCategory.findMany({
 		take: limit,
 		skip: offset,
 		orderBy: {

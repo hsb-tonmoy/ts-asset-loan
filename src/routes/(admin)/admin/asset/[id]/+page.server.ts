@@ -10,22 +10,8 @@ import prisma from '$lib/prisma';
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
 
-	const categories = await prisma.assetCategory.findMany({
-		orderBy: {
-			name: 'asc'
-		}
-	});
-
-	const statuses = await prisma.assetStatus.findMany({
-		orderBy: {
-			name: 'asc'
-		}
-	});
-
 	if (id === 'add') {
 		return {
-			categories,
-			statuses,
 			form: superValidate(formSchema),
 			asset: null
 		};
@@ -42,8 +28,6 @@ export const load: PageServerLoad = async ({ params }) => {
 		});
 
 		return {
-			categories,
-			statuses,
 			assets
 		};
 	} else if (!isNaN(Number(id))) {
@@ -59,8 +43,6 @@ export const load: PageServerLoad = async ({ params }) => {
 
 		if (asset) {
 			return {
-				categories,
-				statuses,
 				form: superValidate(asset, formSchema),
 				asset
 			};
@@ -160,6 +142,9 @@ export const actions: Actions = {
 					imei: form.data.imei,
 					category: {
 						connect: { id: Number(form.data.category) }
+					},
+					status: {
+						connect: { id: Number(form.data.status) }
 					},
 					description: form.data.description
 				}

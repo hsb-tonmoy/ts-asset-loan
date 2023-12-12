@@ -9,20 +9,17 @@
 	import * as Collapsible from '$lib/components/ui/collapsible';
 	import { formSchema } from './schema';
 	import { toast } from 'svoast';
-	import AutoComplete from '$lib/components/ui/autocomplete/AutoComplete.svelte';
 	import { convertToImageURL } from '$lib/utils';
 	import type { PageData } from './$types';
 
 	import AssetStatus from '$lib/components/AsyncSelects/AssetStatus.svelte';
+	import AssetCategory from '$lib/components/AsyncSelects/AssetCategory.svelte';
 
 	export let data: PageData;
 
 	export let edit: boolean = false;
 
 	let uploadedImage: string;
-
-	const categories = data.categories;
-	const statuses = data.statuses;
 
 	const { form, errors, enhance, delayed } = superForm(data.form, {
 		validators: formSchema,
@@ -55,25 +52,7 @@
 		image: uploadedImage
 	}));
 
-	if (edit) uploadedImage = convertToImageURL(data.asset.image);
-
-	let category: any;
-	let status: any;
-
-	if (edit) {
-		category = $form.category;
-		status = $form.status;
-	}
-
-	$: form.update((old) => ({
-		...old,
-		category: category?.id
-	}));
-
-	$: form.update((old) => ({
-		...old,
-		status: status?.id
-	}));
+	if (edit) uploadedImage = convertToImageURL(data.asset?.image);
 </script>
 
 <form
@@ -83,7 +62,6 @@
 	class="flex flex-col gap-4 text-gray-800"
 	enctype="multipart/form-data"
 >
-	<AssetStatus />
 	<Label for="asset_tag">Asset Tag</Label>
 	<Input
 		type="text"
@@ -98,35 +76,10 @@
 	{/if}
 	<Label for="category">Asset Category</Label>
 
-	<AutoComplete
-		items={categories}
-		bind:selectedItem={category}
-		labelFieldName="name"
-		valueFieldName="id"
-		showClear={true}
-		><div slot="item" let:item let:label>
-			<div class="inline-flex items-center gap-2">
-				{#if item.image}
-					<img class="w-10 h-10 object-cover" src={convertToImageURL(item.image)} alt={label} />
-				{/if}
-				{@html label}
-			</div>
-		</div>
-	</AutoComplete>
+	<AssetCategory value={edit && { id: data.asset?.category_id }} bind:justValue={$form.category} />
 	<Label for="status">Asset Status</Label>
+	<AssetStatus value={edit && { id: data.asset?.status_id }} bind:justValue={$form.status} />
 
-	<AutoComplete
-		items={statuses}
-		bind:selectedItem={status}
-		labelFieldName="name"
-		valueFieldName="id"
-		showClear={true}
-		><div slot="item" let:item let:label>
-			<div class="inline-flex items-center gap-2">
-				<span class="w-4 h-4" style="background-color: {item.statusColor} " />{@html label}
-			</div>
-		</div>
-	</AutoComplete>
 	<Label for="name">Name</Label>
 	<Input type="text" name="name" id="name" bind:value={$form.name} class="w-auto min-w-[300px]" />
 	{#if $errors.name}

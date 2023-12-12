@@ -5,16 +5,15 @@
 	import { Button } from '$lib/components/ui/button';
 	import { formSchema } from './schema';
 	import { superForm } from 'sveltekit-superforms/client';
-	import AutoComplete from '$lib/components/ui/autocomplete/AutoComplete.svelte';
 	import MaskedInput from '$lib/components/ui/input-mask/MaskedInput.svelte';
 	import type { PageData } from '../../../../routes/(root)/$types';
 	import { toast } from 'svoast';
 
+	import AssetCategory from '$lib/components/AsyncSelects/AssetCategory.svelte';
+
 	export let data: PageData;
 
 	export let success: boolean = false;
-
-	const categories = data.categories;
 
 	const { form, errors, enhance, delayed } = superForm(data.form, {
 		validators: formSchema,
@@ -69,12 +68,14 @@
 			$form.returnDateTime = convertDateTime(returnDate, returnTime).toISOString();
 		}
 	}
-
-	let selectedCategories: any[] = [];
+	let category: any;
+	let selectedCategories: any = [];
 	let assetRequests: { [categoryName: string]: number } = {};
 
+	$: console.log(selectedCategories);
+
 	$: {
-		selectedCategories.forEach((category) => {
+		selectedCategories.forEach((category: any) => {
 			if (assetRequests[category.name] === undefined) {
 				assetRequests[category.name] = 0;
 			}
@@ -105,19 +106,13 @@
 <form method="POST" use:enhance class="grid grid-cols-6 gap-4 text-gray-800">
 	<div class="flex flex-col gap-4 col-span-6">
 		<Label for="category" class="block">Type of Equipment</Label>
-		<AutoComplete
-			multiple
-			items={categories}
-			bind:selectedItem={selectedCategories}
-			valueFieldName="id"
-			labelFieldName="name"
-			showClear={true}
-			className="w-full"
-		/>
+		<AssetCategory bind:value={selectedCategories} bind:justValue={category} multiple={true} />
 	</div>
 	{#each selectedCategories as category (category.id)}
 		<div class="flex gap-4 col-span-6 w-full">
-			<div class="w-1/4"><Label>{category.name} ({category.assets.length})</Label></div>
+			<div class="w-1/4">
+				<Label>{category.name} ({category.assets ? category.assets.length : 0})</Label>
+			</div>
 			<div class="w-3/4">
 				<Input
 					type="number"

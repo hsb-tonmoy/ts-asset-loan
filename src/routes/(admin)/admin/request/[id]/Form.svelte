@@ -9,12 +9,10 @@
 	import { toast } from 'svoast';
 	import type { PageData } from './$types';
 	import MaskedInput from '$lib/components/ui/input-mask/MaskedInput.svelte';
-	import AutoComplete from '$lib/components/ui/autocomplete/AutoComplete.svelte';
-	import { GanttChartSquare, Pencil } from 'lucide-svelte';
+	import RequestStatus from '$lib/components/AsyncSelects/RequestStatus.svelte';
+	import { GanttChartSquare } from 'lucide-svelte';
 
 	export let data: PageData;
-
-	const { statuses, categories } = data;
 
 	export let edit: boolean = false;
 
@@ -91,13 +89,6 @@
 			$form.returnDateTime = convertDateTime(returnDate, returnTime).toISOString();
 		}
 	}
-
-	$: form.update((old) => ({
-		...old,
-		status: status?.id
-	}));
-
-	$: console.log($form);
 </script>
 
 <section class="relative flex gap-6 w-full py-4">
@@ -115,18 +106,7 @@
 
 		<Label for="status">Request Status</Label>
 
-		<AutoComplete
-			items={statuses}
-			bind:selectedItem={status}
-			labelFieldName="name"
-			valueFieldName="id"
-			showClear={true}
-			><div slot="item" let:item let:label>
-				<div class="inline-flex items-center gap-2">
-					<span class="w-4 h-4" style="background-color: {item.statusColor} " />{@html label}
-				</div>
-			</div>
-		</AutoComplete>
+		<RequestStatus value={edit && { id: data.request?.status_id }} bind:justValue={$form.status} />
 		{#if !data.request?.user}
 			<Label for="firstName">First Name</Label>
 			<Input

@@ -7,26 +7,8 @@ import prisma from '$lib/prisma';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
-
-	const categories = await prisma.assetCategory.findMany({
-		orderBy: {
-			name: 'asc'
-		},
-		include: {
-			assets: true
-		}
-	});
-
-	const statuses = await prisma.requestStatus.findMany({
-		orderBy: {
-			name: 'asc'
-		}
-	});
-
 	if (id === 'add') {
 		return {
-			categories,
-			statuses,
 			form: superValidate(formSchema),
 			request: null
 		};
@@ -43,8 +25,6 @@ export const load: PageServerLoad = async ({ params }) => {
 		});
 
 		return {
-			categories,
-			statuses,
 			requests
 		};
 	} else if (!isNaN(Number(id))) {
@@ -71,9 +51,8 @@ export const load: PageServerLoad = async ({ params }) => {
 
 		if (request) {
 			return {
-				categories,
 				assets,
-				statuses,
+
 				form: superValidate(request, formSchema),
 				request
 			};

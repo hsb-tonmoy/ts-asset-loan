@@ -7,7 +7,7 @@
 	async function loadOptions(searchText: string) {
 		// if (!searchText.length) return Promise.resolve([]);
 		try {
-			const response = await fetch(`/api/asset-status?search=${searchText}`);
+			const response = await fetch(`/api/request-status?search=${searchText}`);
 			items = await response.json();
 			return Promise.resolve(items);
 		} catch (error) {
