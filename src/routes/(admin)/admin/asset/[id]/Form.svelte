@@ -13,6 +13,8 @@
 	import { convertToImageURL } from '$lib/utils';
 	import type { PageData } from './$types';
 
+	import AssetStatus from '$lib/components/AsyncSelects/AssetStatus.svelte';
+
 	export let data: PageData;
 
 	export let edit: boolean = false;
@@ -81,6 +83,7 @@
 	class="flex flex-col gap-4 text-gray-800"
 	enctype="multipart/form-data"
 >
+	<AssetStatus />
 	<Label for="asset_tag">Asset Tag</Label>
 	<Input
 		type="text"
