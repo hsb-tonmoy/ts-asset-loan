@@ -194,14 +194,14 @@
 			/>
 		</div>
 	</div>
-	<div class="flex justify-between items-center my-4">
-		<Button
+	<div class="flex justify-end items-center my-4">
+		<!-- <Button
 			class="bg-blue-500 hover:bg-blue-400 text-white px-4 py-1 rounded"
-			href="/admin/asset/add"
+			href="/admin/request/add"
 		>
 			<Plus class="h-4 w-4 mr-1" />
 			New
-		</Button>
+		</Button> -->
 		<div class="inline-flex items-center gap-4">
 			{#if Object.keys(selection).length > 0}
 				<div class="inline-flex items-center pr-2">
