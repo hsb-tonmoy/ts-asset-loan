@@ -72,8 +72,6 @@
 	let selectedCategories: any = [];
 	let assetRequests: { [categoryName: string]: number } = {};
 
-	$: console.log(selectedCategories);
-
 	$: {
 		selectedCategories.forEach((category: any) => {
 			if (assetRequests[category.name] === undefined) {
@@ -106,12 +104,18 @@
 <form method="POST" use:enhance class="grid grid-cols-6 gap-4 text-gray-800">
 	<div class="flex flex-col gap-4 col-span-6">
 		<Label for="category" class="block">Type of Equipment</Label>
-		<AssetCategory bind:value={selectedCategories} bind:justValue={category} multiple={true} />
+		<AssetCategory
+			bind:value={selectedCategories}
+			bind:justValue={category}
+			multiple={true}
+			includeAssets={true}
+			placeholder="Search for equipments..."
+		/>
 	</div>
 	{#each selectedCategories as category (category.id)}
 		<div class="flex gap-4 col-span-6 w-full">
 			<div class="w-1/4">
-				<Label>{category.name} ({category.assets ? category.assets.length : 0})</Label>
+				<Label>{category.name} ({category.assets.length})</Label>
 			</div>
 			<div class="w-3/4">
 				<Input
