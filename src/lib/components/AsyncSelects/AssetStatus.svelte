@@ -48,8 +48,8 @@
 </div>
 
 <style lang="postcss">
-	:global(#auto-select) {
-		--border: 0;
+	#auto-select {
+		--border: 0 !important;
 		--font-size: 0.875rem;
 	}
 </style>

@@ -12,11 +12,22 @@ export const GET: RequestHandler = async ({ url }) => {
 		orderBy: {
 			id: 'asc'
 		},
+		include: {
+			category: true,
+			status: true
+		},
 		where: {
 			status: {
 				name: 'Requestable'
 			},
 			OR: [
+				{
+					category: {
+						name: {
+							contains: search.toLowerCase()
+						}
+					}
+				},
 				{
 					asset_tag: {
 						equals: search.toLowerCase()

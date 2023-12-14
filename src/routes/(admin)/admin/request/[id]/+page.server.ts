@@ -36,7 +36,15 @@ export const load: PageServerLoad = async ({ params }) => {
 				user: true,
 				status: true,
 				approved_by_user: true,
-				assets: true
+				assets: {
+					include: {
+						asset: {
+							include: {
+								category: true
+							}
+						}
+					}
+				}
 			}
 		});
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import AssetCheckout from './asset-checkout/AssetCheckout.svelte';
+	import AssetCheckout from '../asset-checkout/AssetCheckout.svelte';
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import Form from './Form.svelte';
@@ -27,7 +27,7 @@
 			{/if}
 		</div>
 		<div class="bg-white dark:bg-[#18181C] w-2/4 p-4">
-			<AssetCheckout data={data.assets} />
+			<AssetCheckout request={data.request} />
 		</div>
 	{:else if action === 'list' && requests}
 		{#key requests}

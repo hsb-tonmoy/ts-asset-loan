@@ -25,7 +25,7 @@
 	}
 </script>
 
-<div id="auto-select">
+<div class="auto-select">
 	<Select
 		{itemId}
 		{items}
@@ -35,8 +35,6 @@
 		bind:value
 		on:clear
 		{placeholder}
-		containerStyles="auto-select border border-input bg-transparent"
-		class="rounded-md border border-input bg-transparent px-3 py-2 text-sm dark:text-white ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none hover:ring-1 hover:ring-ring focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
 	>
 		<div class="inline-flex items-center gap-1" slot="item" let:item let:index>
 			{#if item.image}
@@ -61,8 +59,7 @@
 </div>
 
 <style lang="postcss">
-	:global(#auto-select) {
-		--border: 0;
-		--font-size: 0.875rem;
+	:global(.svelte-select) {
+		@apply rounded-md border border-input bg-transparent px-3 py-2 text-sm dark:text-white ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none hover:ring-1 hover:ring-ring focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 !important;
 	}
 </style>
