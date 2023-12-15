@@ -4,6 +4,7 @@
 		Gauge,
 		User,
 		ClipboardList,
+		ClipboardCheck,
 		MonitorSmartphone,
 		Monitor,
 		Cog,
@@ -37,6 +38,21 @@
 				{
 					name: 'List Requests',
 					link: '/admin/request/list'
+				}
+			]
+		},
+		{
+			name: 'Checkouts',
+			icon: ClipboardCheck,
+			link: '/admin/asset-checkout/list',
+			submenu: [
+				{
+					name: 'Checkout Asset',
+					link: '/admin/asset-checkout/add'
+				},
+				{
+					name: 'List Checkouts',
+					link: '/admin/asset-checkout/list'
 				}
 			]
 		},

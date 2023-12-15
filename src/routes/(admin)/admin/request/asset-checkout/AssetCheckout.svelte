@@ -4,7 +4,7 @@
 	import type { Asset, AssetCategory, Request } from '@prisma/client';
 	import Assets from '$lib/components/AsyncSelects/Assets.svelte';
 	import { convertToImageURL } from '$lib/utils';
-	import { invalidateAll } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { toast } from 'svoast';
 
 	type AssetWithCategory = Asset & { category: AssetCategory };
@@ -32,7 +32,10 @@
 		data = [...data, selected];
 	}
 
+	let submitting: boolean = false;
+
 	const handleSubmit = async () => {
+		submitting = true;
 		const assetIDs = data.map((asset) => asset.id);
 
 		const res = await fetch(`/api/asset-checkout/`, {
@@ -48,10 +51,11 @@
 		});
 
 		if (res.ok) {
-			invalidateAll();
+			submitting = false;
 			toast.success(`Assets successfully checked out!`, {
 				closable: true
 			});
+			goto(`/admin/request/list`);
 		}
 	};
 </script>
@@ -101,8 +105,8 @@
 		</table>
 		{#if !hasAssets}
 			<div class="self-end">
-				<Button type="button" on:click={handleSubmit}
-					>Checkout to {request.firstName + ' ' + request.lastName}</Button
+				<Button type="button" on:click={handleSubmit} loading={submitting}>
+					Checkout to {request.firstName + ' ' + request.lastName}</Button
 				>
 			</div>
 		{/if}

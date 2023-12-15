@@ -77,6 +77,7 @@
 			cell: (info) => formatDateTime(info.getValue() as string)
 		},
 		{
+			id: 'status',
 			accessorKey: 'status.name',
 			header: 'Status',
 			cell: (info) => info.getValue()
@@ -257,6 +258,14 @@
 										/>
 									{/if}
 									{cell.getValue()}
+								</div>
+							{:else if cell.getContext().column.id === 'status'}
+								<div class="inline-flex items-center gap-2">
+									<span
+										class="w-4 h-4"
+										style="background-color: {cell.getContext().row.original.status.statusColor} "
+									/>
+									{cell.getContext().row.original.status.name}
 								</div>
 							{:else}
 								<svelte:component

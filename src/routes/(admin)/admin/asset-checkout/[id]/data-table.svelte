@@ -9,12 +9,14 @@
 		renderComponent
 	} from '@tanstack/svelte-table';
 	import type { TableOptions, ColumnDef, RowSelectionState } from '@tanstack/svelte-table';
-	import type { AssetCheckout, Asset, AssetCategory } from '@prisma/client';
+	import type { AssetCheckout, Asset, AssetCategory, User } from '@prisma/client';
 
-	type AssetCheckoutWithAssets = AssetCheckout & {
+	type AssetCheckoutWithAssetsAndUser = AssetCheckout & {
+		user: User;
 		asset: Asset & {
 			category: AssetCategory;
 		};
+		approved_by_user: User;
 	};
 
 	import Label from '$lib/components/ui/label/label.svelte';
@@ -26,14 +28,13 @@
 	import RowCheckbox from './row-checkbox.svelte';
 	import ColumnVisibility from './column-visibility.svelte';
 
-	import { copyText } from '$lib/components/ClickToCopy';
-	import { convertToImageURL } from '$lib/utils';
+	import { formatDateTime } from '$lib/utils';
 
-	export let data: AssetCheckoutWithAssets[];
+	export let data: AssetCheckoutWithAssetsAndUser[];
 
-	let textCopied: boolean = false;
+	console.log(data);
 
-	const defaultColumns: ColumnDef<AssetCheckoutWithAssets>[] = [
+	const defaultColumns: ColumnDef<AssetCheckoutWithAssetsAndUser>[] = [
 		{
 			id: 'select',
 			header: ({ table }) =>
@@ -56,28 +57,41 @@
 			cell: (info) => info.getValue()
 		},
 		{
-			accessorKey: 'category.name',
-			header: 'Category',
-			cell: (info) => info.getValue()
+			id: 'fullName',
+			accessorFn: (row) => `${row.user.firstName} ${row.user.lastName}`,
+			header: 'Checked Out By'
 		},
 		{
-			accessorKey: 'asset_tag',
+			accessorKey: 'asset.asset_tag',
 			header: 'Asset Tag',
 			cell: (info) => info.getValue()
 		},
 		{
-			accessorKey: 'name',
-			header: 'Name',
+			accessorKey: 'asset.category.name',
+			header: 'Asset Category',
 			cell: (info) => info.getValue()
 		},
 		{
-			accessorKey: 'image',
-			header: 'Image',
+			accessorKey: 'checkout_date',
+			header: 'Checkout Date',
+			cell: (info) => formatDateTime(info.getValue() as string)
+		},
+		{
+			accessorKey: 'checkin_date',
+			header: 'Check-In Date',
+			cell: (info) => formatDateTime(info.getValue() as string)
+		},
+		{
+			id: 'request',
+			accessorKey: 'request_id',
+			header: 'Associated Request',
 			cell: (info) => info.getValue()
 		},
 		{
-			accessorKey: 'status',
-			header: 'Status'
+			id: 'approved_by_user',
+			accessorKey: 'approved_by_user.firstName',
+			header: 'Approved By',
+			cell: (info) => info.getValue()
 		},
 		{
 			id: 'actions',
@@ -124,7 +138,7 @@
 	};
 
 	let columnVisibility = {
-		image: false
+		id: false
 	};
 
 	const setColumnVisibility = (updater) => {
@@ -239,43 +253,22 @@
 				<tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
 					{#each row.getVisibleCells() as cell, i}
 						<td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
-							{#if cell.getContext().column.id === 'name'}
-								<div class="inline-flex items-center gap-2">
-									{#if cell.getContext().row.original.image}
-										<img
-											class="w-10 h-10 object-cover"
-											src={convertToImageURL(cell.getContext().row.original.image)}
-											alt={cell.getValue()}
-										/>
-									{/if}
+							{#if cell.getContext().column.id === 'fullName'}
+								<div class="flex flex-col gap-1">
 									{cell.getValue()}
+									<span class="text-xs">{cell.getContext().row.original.user.email}</span>
 								</div>
-							{:else if cell.getContext().column.id === 'status'}
-								<div class="inline-flex items-center gap-2">
-									<span class="w-4 h-4" style="background-color: {cell.getValue().statusColor} " />
-									{cell.getValue().name}
+							{:else if cell.getContext().column.id === 'request'}
+								<a href="/admin/request/{cell.getValue()}" class="text-blue-600 dark:text-blue-400"
+									>Request: {cell.getValue()}</a
+								>
+							{:else if cell.getContext().column.id === 'approved_by_user'}
+								<div class="flex flex-col gap-1">
+									{cell.getValue()}
+									<span class="text-xs"
+										>{cell.getContext().row.original.approved_by_user.email}</span
+									>
 								</div>
-							{:else if cell.getContext().column.id === 'asset_tag'}
-								<Tooltip.Root>
-									<Tooltip.Trigger>
-										<button
-											on:click={() => {
-												copyText(cell.getValue());
-												textCopied = true;
-												setTimeout(() => {
-													textCopied = false;
-												}, 2000);
-											}}
-										>
-											<span class="underline decoration-dotted underline-offset-4"
-												>{cell.getValue()}</span
-											>
-										</button>
-									</Tooltip.Trigger>
-									<Tooltip.Content>
-										<span>{textCopied ? 'Copied!' : 'Click to Copy'}</span>
-									</Tooltip.Content>
-								</Tooltip.Root>
 							{:else}
 								<svelte:component
 									this={flexRender(cell.column.columnDef.cell, cell.getContext())}

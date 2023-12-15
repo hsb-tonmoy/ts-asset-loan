@@ -67,6 +67,7 @@ export const convertToImageURL = (file: string) => {
 };
 
 export const formatDateTime = (dateTimeString: string) => {
+	if (dateTimeString === null) return '';
 	const date = new Date(dateTimeString);
 	const currentYear = new Date().getFullYear();
 
