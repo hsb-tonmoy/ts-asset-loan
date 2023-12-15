@@ -174,6 +174,8 @@
 	};
 
 	const table = createSvelteTable(options);
+
+	$: console.log(data);
 </script>
 
 <div class="flex flex-col bg-white dark:bg-[#18181C] box-border p-4 w-full">

@@ -1,12 +1,15 @@
-<script>
+<script lang="ts">
 	import '../app.postcss';
 	import { Toasts } from 'svoast';
 	import { ModeWatcher } from 'mode-watcher';
 	import Loading from '$lib/Loading.svelte';
+	import type { LayoutData } from './$types';
+
+	export let data: LayoutData;
 </script>
 
 <svelte:head>
-	<title>KPL Asset Management</title>
+	<title>{data.siteSettings.site_name}</title>
 </svelte:head>
 <Loading />
 <Toasts position="top-center" />

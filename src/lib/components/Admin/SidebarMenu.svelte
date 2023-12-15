@@ -15,6 +15,8 @@
 	import * as Collapsible from '$lib/components/ui/collapsible';
 	import { Button } from '$lib/components/ui/button';
 
+	export let site_name: string;
+
 	const menuItems = [
 		{
 			name: 'Dashboard',
@@ -89,7 +91,7 @@
 		{
 			name: 'Settings',
 			icon: Cog,
-			link: '#',
+			link: '/admin/settings',
 			submenu: [
 				{
 					name: 'Asset Status',
@@ -111,8 +113,8 @@
 
 <div class="flex flex-col h-full w-full">
 	<div class="inline-flex flex-col items-center gap-2 mb-10">
-		<img src="/logo.svg" alt="Kalamazoo Public Library" class="w-12" /><span
-			class="text-white text-sm text-center">Kalamazoo Public Library</span
+		<img src="/logo.svg" alt={site_name} class="w-12" /><span class="text-white text-sm text-center"
+			>{site_name}</span
 		>
 	</div>
 	<div class="flex flex-col gap-6">

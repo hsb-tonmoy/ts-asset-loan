@@ -45,8 +45,7 @@
 			},
 			body: JSON.stringify({
 				assetIDs,
-				request,
-				approved_by_user: $page.data.user.userId
+				request
 			})
 		});
 
@@ -106,7 +105,7 @@
 		{#if !hasAssets}
 			<div class="self-end">
 				<Button type="button" on:click={handleSubmit} loading={submitting}>
-					Checkout to {request.firstName + ' ' + request.lastName}</Button
+					Checkout to {request.firstName + ' ' + request.lastName ?? 'User'}</Button
 				>
 			</div>
 		{/if}

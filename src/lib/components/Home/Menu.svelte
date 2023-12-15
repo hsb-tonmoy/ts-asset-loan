@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { Gauge, User, HelpCircle, LogOut, Home } from 'lucide-svelte';
 
+	export let site_name: string = '';
 	export let user: any;
 	export let login: boolean = false;
 </script>
@@ -10,7 +11,7 @@
 	<div class="flex flex-col items-center w-full mb-6 xl:mb-20">
 		<img src="/logo.svg" alt="KPL" class="w-14 md:w-20 xl:w-2/4" />
 		<span class="font-semibold text-sm text-center text-[#b0b0b0] dark:text-white mt-2"
-			>Kalamazoo Public Library</span
+			>{site_name}</span
 		>
 	</div>
 	<ul class="flex justify-center xl:justify-start xl:flex-col w-full gap-6 xl:gap-16">

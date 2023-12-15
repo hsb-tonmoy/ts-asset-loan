@@ -1,8 +1,11 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 import prisma from '$lib/prisma';
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, locals }) => {
 	const data = await request.json();
+
+	const session = await locals.auth.validate();
+	const { user } = session;
 
 	// Loop through data and create a new asset checkout for each ID in assetIDs
 	for (const assetID of data.assetIDs) {
@@ -26,7 +29,7 @@ export const POST: RequestHandler = async ({ request }) => {
 					},
 					approved_by_user: {
 						connect: {
-							id: data.approved_by_user
+							id: user.userId
 						}
 					}
 				}
