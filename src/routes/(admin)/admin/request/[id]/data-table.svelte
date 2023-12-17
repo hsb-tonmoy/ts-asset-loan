@@ -83,7 +83,7 @@
 			cell: (info) => info.getValue()
 		},
 		{
-			accessorKey: 'approved_by_user.firstName',
+			accessorKey: 'reviewed_by_user.firstName',
 			header: 'Reviewed By',
 			cell: (info) => info.getValue()
 		},

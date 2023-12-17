@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		const requests = await prisma.request.findMany({
 			include: {
 				status: true,
-				approved_by_user: true,
+				reviewed_by_user: true,
 				assets: true
 			},
 			orderBy: {
@@ -35,7 +35,7 @@ export const load: PageServerLoad = async ({ params }) => {
 			include: {
 				user: true,
 				status: true,
-				approved_by_user: true,
+				reviewed_by_user: true,
 				assets: {
 					include: {
 						asset: {
@@ -130,7 +130,7 @@ export const actions: Actions = {
 						}
 					},
 					...(session && {
-						approved_by_user: {
+						reviewed_by_user: {
 							connect: {
 								id: session.user?.userId
 							}

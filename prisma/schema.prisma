@@ -1,5 +1,5 @@
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -13,13 +13,13 @@ model User {
   firstName        String?
   lastName         String?
   role             String? @default("staff")
-  username         String? @unique
+  phone         String?
 
   auth_session Session[]
   key          Key[]
   requestsMade     Request[] @relation("requestsMade")
   requestsAssigned Request[] @relation("requestsAssigned")
-  requestsApproved Request[] @relation("requestsApproved")
+  requestsReviewed Request[] @relation("requestsReviewed")
   assetsCheckedOut AssetCheckout[] @relation("checkedOutByUser")
   assetsCheckoutApproved   AssetCheckout[] @relation("approvedByUser")
 
@@ -62,8 +62,8 @@ model Request {
   notes        String?
   assigned_to_user_id   String?
   assigned_to_user      User?   @relation(fields: [assigned_to_user_id], references: [id], name: "requestsAssigned")
-  approved_by_user_id   String?
-  approved_by_user      User?   @relation(fields: [approved_by_user_id], references: [id], name: "requestsApproved")
+  reviewed_by_user_id   String?
+  reviewed_by_user      User?   @relation(fields: [reviewed_by_user_id], references: [id], name: "requestsReviewed")
   assets       AssetCheckout[]
 }
 

@@ -22,7 +22,6 @@
 	import Label from '$lib/components/ui/label/label.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import * as Tooltip from '$lib/components/ui/tooltip';
 
 	import RowActions from './row-actions.svelte';
 	import RowCheckbox from './row-checkbox.svelte';
