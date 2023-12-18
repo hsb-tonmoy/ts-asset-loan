@@ -27,7 +27,7 @@
 	}}
 	class="inline-flex items-center gap-2"
 >
-	<Button href="/admin/asset/{row.id}" variant="outline" size="icon">
+	<Button href="/admin/asset/{row.asset_tag}" variant="outline" size="icon">
 		<Pencil class="w-4 h-4" />
 	</Button>
 	<AlertDialog.Root>

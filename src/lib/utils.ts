@@ -86,3 +86,13 @@ export const formatDateTime = (dateTimeString: string) => {
 
 	return `${formattedDate} at ${formattedTime}`;
 };
+
+export const convertDateTime = (dateString: string, timeString: string) => {
+	const date = new Date(dateString + 'T00:00:00');
+
+	const [hours, minutes] = timeString.split(':').map(Number);
+
+	date.setHours(hours, minutes, 0, 0);
+
+	return date;
+};

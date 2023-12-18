@@ -9,8 +9,8 @@
 	import MaskedInput from '$lib/components/ui/input-mask/MaskedInput.svelte';
 	import type { PageData } from '../../../../routes/(root)/$types';
 	import { toast } from 'svoast';
-
 	import AssetCategory from '$lib/components/AsyncSelects/AssetCategory.svelte';
+	import { convertDateTime } from '$lib/utils';
 
 	export let data: PageData;
 
@@ -72,16 +72,6 @@
 	};
 
 	let requestDate: string, requestTime: string, returnDate: string, returnTime: string;
-
-	const convertDateTime = (dateString: string, timeString: string) => {
-		const date = new Date(dateString + 'T00:00:00');
-
-		const [hours, minutes] = timeString.split(':').map(Number);
-
-		date.setHours(hours, minutes, 0, 0);
-
-		return date;
-	};
 
 	$: {
 		if (requestDate && requestTime) {
@@ -198,7 +188,7 @@
 			size={20}
 			showMask
 			maskChar="_"
-			value={$form.phone}
+			value={$form.phone ?? ''}
 			on:change={({ detail }) => ($form.phone = detail.inputState.unmaskedValue)}
 		/>
 		{#if $errors.phone}

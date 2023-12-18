@@ -31,7 +31,7 @@
 		{loadOptions}
 		bind:justValue
 		bind:value
-		placeholder="Search for status"
+		placeholder="Search for a status"
 		containerStyles="border border-input bg-transparent"
 		class="rounded-md border border-input bg-transparent px-3 py-2 text-sm dark:text-white ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none hover:ring-1 hover:ring-ring focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
 	>

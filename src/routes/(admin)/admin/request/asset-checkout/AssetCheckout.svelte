@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import { page } from '$app/stores';
 	import type { Asset, AssetCategory, Request } from '@prisma/client';
 	import Assets from '$lib/components/AsyncSelects/Assets.svelte';
 	import { convertToImageURL } from '$lib/utils';
 	import { goto } from '$app/navigation';
 	import { toast } from 'svoast';
+	import { X } from 'lucide-svelte';
 
 	type AssetWithCategory = Asset & { category: AssetCategory };
 	type RequestWithAssets = Request & { assets: AssetWithCategory[] };
@@ -14,9 +14,9 @@
 
 	export let request: RequestWithAssets;
 
-	const hasAssets = request.assets.length > 0;
+	let hasAssets = request.assets.length > 0;
 
-	$: if (hasAssets) {
+	$: if (hasAssets && request.assets.length > 0) {
 		// Map request.assets to data
 		for (const asset of request.assets) {
 			data = [...data, asset.asset];
@@ -30,6 +30,7 @@
 
 	$: if (selected && !data.some((asset) => asset.id === selected.id)) {
 		data = [...data, selected];
+		selected = null;
 	}
 
 	let submitting: boolean = false;
@@ -51,6 +52,7 @@
 
 		if (res.ok) {
 			submitting = false;
+
 			toast.success(`Assets successfully checked out!`, {
 				closable: true
 			});
@@ -97,6 +99,20 @@
 						</td>
 						<td class="p-4 align-middle">
 							{row.category.name}
+						</td>
+						<td class="p-4 align-middle">
+							{#if !hasAssets}
+								<Button
+									type="button"
+									variant="outline"
+									size="icon"
+									on:click={() => {
+										data = data.filter((asset) => asset.id !== row.id);
+									}}
+								>
+									<X class="w-4 h-4 text-red-600" />
+								</Button>
+							{/if}
 						</td>
 					</tr>
 				{/each}

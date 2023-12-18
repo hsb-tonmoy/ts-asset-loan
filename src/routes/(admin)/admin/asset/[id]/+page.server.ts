@@ -33,7 +33,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	} else if (!isNaN(Number(id))) {
 		const asset = await prisma.asset.findUnique({
 			where: {
-				id: Number(id)
+				asset_tag: id
 			},
 			include: {
 				category: true,
@@ -96,14 +96,12 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const form = await superValidate(formData, formSchema);
 
-		console.log(form.data);
-
 		if (!form.valid) return fail(400, { form });
 
 		try {
 			const existingAsset = await prisma.asset.findUnique({
 				where: {
-					id: Number(id)
+					asset_tag: form.data.asset_tag
 				}
 			});
 
@@ -128,7 +126,7 @@ export const actions: Actions = {
 
 			await prisma.asset.update({
 				where: {
-					id: Number(id)
+					asset_tag: id
 				},
 				data: {
 					name: form.data.name,
@@ -162,12 +160,10 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const form = await superValidate(formData, formSchema);
 
-		const id = formData.get('id');
-
 		try {
 			const existingasset = await prisma.asset.findUnique({
 				where: {
-					id: Number(id)
+					asset_tag: form.data.asset_tag
 				}
 			});
 
@@ -184,7 +180,7 @@ export const actions: Actions = {
 		try {
 			await prisma.asset.delete({
 				where: {
-					id: Number(id)
+					asset_tag: form.data.asset_tag
 				}
 			});
 		} catch (err) {

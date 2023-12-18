@@ -9,7 +9,7 @@
 	export let value: any = [];
 	export let multiple: boolean = false;
 
-	export let placeholder: string = 'Search for category';
+	export let placeholder: string = 'Search for an asset';
 
 	async function loadOptions(searchText: string) {
 		const params = new URLSearchParams();
@@ -40,18 +40,11 @@
 			{#if item.image}
 				<img class="w-8 h-8 object-cover" src={convertToImageURL(item.image)} alt={item.name} />
 			{/if}
-			{item.name}
+			{item.name} - {item.asset_tag}
 		</div>
 
 		<div class="inline-flex items-center gap-1" slot="selection" let:selection>
-			{#if selection.image && !multiple}
-				<img
-					class="w-8 h-8 object-cover"
-					src={convertToImageURL(selection.image)}
-					alt={selection.name}
-				/>
-			{/if}
-			{selection.name}
+			{selection.name} - {selection.asset_tag}
 		</div>
 
 		<div slot="clear-icon" />

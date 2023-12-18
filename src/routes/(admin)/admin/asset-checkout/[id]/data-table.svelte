@@ -31,8 +31,6 @@
 
 	export let data: AssetCheckoutWithAssetsAndUser[];
 
-	console.log(data);
-
 	const defaultColumns: ColumnDef<AssetCheckoutWithAssetsAndUser>[] = [
 		{
 			id: 'select',
@@ -61,6 +59,7 @@
 			header: 'Checked Out By'
 		},
 		{
+			id: 'asset_tag',
 			accessorKey: 'asset.asset_tag',
 			header: 'Asset Tag',
 			cell: (info) => info.getValue()
@@ -257,6 +256,10 @@
 									{cell.getValue()}
 									<span class="text-xs">{cell.getContext().row.original.user.email}</span>
 								</div>
+							{:else if cell.getContext().column.id === 'asset_tag'}
+								<a href="/admin/asset/{cell.getValue()}" class="text-blue-600 dark:text-blue-400"
+									>{cell.getValue()}</a
+								>
 							{:else if cell.getContext().column.id === 'request'}
 								<a href="/admin/request/{cell.getValue()}" class="text-blue-600 dark:text-blue-400"
 									>Request: {cell.getValue()}</a
