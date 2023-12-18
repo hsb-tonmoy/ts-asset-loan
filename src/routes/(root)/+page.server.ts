@@ -36,6 +36,8 @@ export const actions: Actions = {
 
 		if (!form.valid) return fail(400, { form });
 
+		const formData = form.data;
+
 		const status = await prisma.requestStatus.findFirst({
 			where: {
 				name: 'Pending'
@@ -44,10 +46,27 @@ export const actions: Actions = {
 
 		const session = await event.locals.auth.validate();
 
+		if (form.data.updatePhone) {
+			try {
+				await prisma.user.update({
+					where: {
+						id: session.user?.userId
+					},
+					data: {
+						phone: form.data.phone
+					}
+				});
+			} catch (err) {
+				console.log(err);
+			}
+		}
+
+		delete formData.updatePhone;
+
 		try {
 			await prisma.request.create({
 				data: {
-					...form.data,
+					...formData,
 					requestedCategories: form.data.requestedCategories,
 					status: {
 						connect: {

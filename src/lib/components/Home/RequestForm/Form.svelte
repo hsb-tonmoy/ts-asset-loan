@@ -3,6 +3,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import { Button } from '$lib/components/ui/button';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import { formSchema } from './schema';
 	import { superForm } from 'sveltekit-superforms/client';
 	import MaskedInput from '$lib/components/ui/input-mask/MaskedInput.svelte';
@@ -14,6 +15,8 @@
 	export let data: PageData;
 
 	export let success: boolean = false;
+
+	let userHasPhone: boolean = false;
 
 	const { form, errors, enhance, delayed } = superForm(data.form, {
 		validators: formSchema,
@@ -40,12 +43,33 @@
 				$form.firstName = data.user.firstName;
 				$form.lastName = data.user.lastName;
 				$form.email = data.user.email;
+				$form.phone = data.user.phone;
 
 				return $form;
 			},
 			{ taint: false }
 		);
 	}
+
+	$: {
+		if (data.user && data.user.phone) {
+			userHasPhone = true;
+		}
+	}
+
+	const handlePhoneUpdate = async () => {
+		form.update(
+			($form) => {
+				$form.updatePhone = true;
+
+				return $form;
+			},
+			{ taint: false }
+		);
+
+		const formElement = document.querySelector('form') as HTMLFormElement;
+		formElement.requestSubmit();
+	};
 
 	let requestDate: string, requestTime: string, returnDate: string, returnTime: string;
 
@@ -101,7 +125,7 @@
 	}
 </script>
 
-<form method="POST" use:enhance class="grid grid-cols-6 gap-4 text-gray-800">
+<form id="requestForm" method="POST" use:enhance class="grid grid-cols-6 gap-4 text-gray-800">
 	<div class="flex flex-col gap-4 col-span-6">
 		<Label for="category" class="block">Type of Equipment</Label>
 		<AssetCategory
@@ -174,6 +198,7 @@
 			size={20}
 			showMask
 			maskChar="_"
+			value={$form.phone}
 			on:change={({ detail }) => ($form.phone = detail.inputState.unmaskedValue)}
 		/>
 		{#if $errors.phone}
@@ -243,7 +268,30 @@
 	</div>
 
 	<div class="col-span-6">
-		<Button type="submit" class="w-auto self-start" loading={$delayed}>Submit</Button>
+		{#if !userHasPhone}
+			<AlertDialog.Root>
+				<AlertDialog.Trigger asChild let:builder>
+					<Button type="button" builders={[builder]} class="w-auto self-start">Submit</Button>
+				</AlertDialog.Trigger>
+				<AlertDialog.Content>
+					<AlertDialog.Header>
+						<AlertDialog.Title>Update Phone Number?</AlertDialog.Title>
+						<AlertDialog.Description>
+							You don't have a phone number set in your profile. Would you like to update your
+							profile with this number: ({$form.phone})?
+						</AlertDialog.Description>
+					</AlertDialog.Header>
+					<AlertDialog.Footer>
+						<AlertDialog.Cancel>Not Now</AlertDialog.Cancel>
+						<AlertDialog.Action on:click={handlePhoneUpdate} class="bg-destructive text-white"
+							>Yes, please</AlertDialog.Action
+						>
+					</AlertDialog.Footer>
+				</AlertDialog.Content>
+			</AlertDialog.Root>
+		{:else}
+			<Button type="submit" class="w-auto self-start" loading={$delayed}>Submit</Button>
+		{/if}
 	</div>
 </form>
 

@@ -18,6 +18,7 @@ export const auth = lucia({
 			email: data.email,
 			firstName: data.firstName,
 			lastName: data.lastName,
+			phone: data.phone,
 			role: data.role
 		};
 	}

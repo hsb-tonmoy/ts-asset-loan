@@ -3,6 +3,7 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import { Label } from '$lib/components/ui/label';
 	import { Input } from '$lib/components/ui/input';
+	import MaskedInput from '$lib/components/ui/input-mask/MaskedInput.svelte';
 	import * as Select from '$lib/components/ui/select';
 	import { Button } from '$lib/components/ui/button';
 	import { formSchema } from './schema';
@@ -79,6 +80,21 @@
 	/>
 	{#if $errors.email}
 		<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.email}</span>
+	{/if}
+
+	<Label for="phone">Phone</Label>
+	<MaskedInput
+		id="phone"
+		name="phone"
+		mask="(000) 000 - 0000"
+		size={20}
+		showMask
+		maskChar="_"
+		value={$form.phone}
+		on:change={({ detail }) => ($form.phone = detail.inputState.unmaskedValue)}
+	/>
+	{#if $errors.phone}
+		<span class="text-sm font-medium text-destructive dark:text-red-600">{$errors.phone}</span>
 	{/if}
 
 	<Label for="role">Role</Label>

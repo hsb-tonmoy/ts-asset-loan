@@ -52,6 +52,7 @@ export const actions: Actions = {
 				data: {
 					firstName: form.data.firstName,
 					lastName: form.data.lastName,
+					phone: form.data.phone,
 					role: form.data.role
 				}
 			});

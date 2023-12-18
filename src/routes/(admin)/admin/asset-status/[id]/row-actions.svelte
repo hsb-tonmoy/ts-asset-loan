@@ -30,7 +30,7 @@
 	<Button href="/admin/asset-status/{row.id}" variant="outline" size="icon">
 		<Pencil class="w-4 h-4" />
 	</Button>
-	{#if row.name !== 'Requestable'}
+	{#if !(row.name === 'Requestable' || row.name === 'Checked Out')}
 		<AlertDialog.Root>
 			<AlertDialog.Trigger asChild let:builder>
 				<Button builders={[builder]} variant="outline" size="icon">

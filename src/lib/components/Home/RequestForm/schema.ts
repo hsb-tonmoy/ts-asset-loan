@@ -8,7 +8,8 @@ export const formSchema = z.object({
 	phone: z.string().min(10, { message: 'Phone number must be at least 10 characters long' }),
 	requestDateTime: z.string().min(10, { message: 'Please enter a valid date' }),
 	returnDateTime: z.string().min(10, { message: 'Please enter a valid date' }),
-	notes: z.string().optional()
+	notes: z.string().optional(),
+	updatePhone: z.boolean().optional()
 });
 
 export type FormSchema = typeof formSchema;

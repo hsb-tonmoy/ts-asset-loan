@@ -30,7 +30,7 @@
 	<Button href="/admin/request-status/{row.id}" variant="outline" size="icon">
 		<Pencil class="w-4 h-4" />
 	</Button>
-	{#if row.name !== 'Pending'}
+	{#if !(row.name === 'Pending' || row.name === 'Approved')}
 		<AlertDialog.Root>
 			<AlertDialog.Trigger asChild let:builder>
 				<Button builders={[builder]} variant="outline" size="icon">
