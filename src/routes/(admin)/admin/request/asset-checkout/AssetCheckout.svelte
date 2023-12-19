@@ -14,7 +14,7 @@
 
 	export let request: RequestWithAssets;
 
-	$: hasAssets = request.assets.length > 0;
+	$: hasAssets = request && request.assets.length > 0;
 
 	$: if (hasAssets && request.assets.length > 0) {
 		// Map request.assets to data
@@ -28,12 +28,13 @@
 	let selected: any = null;
 	let justValue: any = null;
 
-	$: if (selected && !data.some((asset) => asset.id === selected.id)) {
-		data = [...data, selected];
+	$: if (selected) {
+		const assetExists = data.some((asset) => asset.id === selected.id);
+		if (!assetExists) {
+			data = [...data, selected];
+		}
 		selected = null;
 	}
-
-	$: console.log(data);
 
 	let submitting: boolean = false;
 
@@ -58,8 +59,7 @@
 			toast.success(`Assets successfully checked out!`, {
 				closable: true
 			});
-			invalidateAll();
-			goto(`/admin/request/list`);
+			window.location.href = `/admin/request/list`;
 		}
 	};
 </script>
@@ -124,7 +124,7 @@
 		{#if !hasAssets}
 			<div class="self-end">
 				<Button type="button" on:click={handleSubmit} loading={submitting}>
-					Checkout to {request.firstName + ' ' + request.lastName ?? 'User'}</Button
+					Checkout to {request?.firstName + ' ' + request?.lastName ?? 'User'}</Button
 				>
 			</div>
 		{/if}

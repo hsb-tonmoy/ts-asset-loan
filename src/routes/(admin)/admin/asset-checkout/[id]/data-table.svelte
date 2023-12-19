@@ -261,9 +261,14 @@
 									>{cell.getValue()}</a
 								>
 							{:else if cell.getContext().column.id === 'request'}
-								<a href="/admin/request/{cell.getValue()}" class="text-blue-600 dark:text-blue-400"
-									>Request: {cell.getValue()}</a
-								>
+								{#if cell.getValue() === null}
+									Not Associated
+								{:else}
+									<a
+										href="/admin/request/{cell.getValue()}"
+										class="text-blue-600 dark:text-blue-400">Request: {cell.getValue()}</a
+									>
+								{/if}
 							{:else if cell.getContext().column.id === 'approved_by_user'}
 								<div class="flex flex-col gap-1">
 									{cell.getValue()}

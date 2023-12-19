@@ -96,3 +96,11 @@ export const convertDateTime = (dateString: string, timeString: string) => {
 
 	return date;
 };
+
+export const extractDate = (dateObj) => {
+	return dateObj.toISOString().split('T')[0];
+};
+
+export const extractTime = (dateObj) => {
+	return dateObj.toISOString().split('T')[1].slice(0, 5);
+};

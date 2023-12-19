@@ -11,6 +11,7 @@
 	import MaskedInput from '$lib/components/ui/input-mask/MaskedInput.svelte';
 	import RequestStatus from '$lib/components/AsyncSelects/RequestStatus.svelte';
 	import { GanttChartSquare } from 'lucide-svelte';
+	import { convertDateTime, extractDate, extractTime } from '$lib/utils';
 
 	export let data: PageData;
 
@@ -49,24 +50,6 @@
 	let returnDateTimeFromDb = new Date(data.request?.returnDateTime);
 
 	let requestDate: string, requestTime: string, returnDate: string, returnTime: string;
-
-	const convertDateTime = (dateString: string, timeString: string) => {
-		const date = new Date(dateString + 'T00:00:00');
-
-		const [hours, minutes] = timeString.split(':').map(Number);
-
-		date.setHours(hours, minutes, 0, 0);
-
-		return date;
-	};
-
-	const extractDate = (dateObj) => {
-		return dateObj.toISOString().split('T')[0];
-	};
-
-	const extractTime = (dateObj) => {
-		return dateObj.toISOString().split('T')[1].slice(0, 5);
-	};
 
 	if (edit) {
 		if (requestDateTimeFromDb instanceof Date) {

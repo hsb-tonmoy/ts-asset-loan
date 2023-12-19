@@ -95,8 +95,8 @@ model AssetCheckout {
   asset       Asset   @relation(fields: [asset_id], references: [id])
   user_id     String
   user        User    @relation(fields: [user_id], references: [id], name: "checkedOutByUser")
-  request_id  Int
-  request     Request @relation(fields: [request_id], references: [id])
+  request_id  Int?
+  request     Request? @relation(fields: [request_id], references: [id])
   checkout_date DateTime? @default(now())
   checkin_date  DateTime?
   approved_by_user_id String?

@@ -98,8 +98,6 @@ export const actions: Actions = {
 
 		if (!form.valid) return fail(400, { form });
 
-		console.log(form.data);
-
 		try {
 			const existingAsset = await prisma.asset.findUnique({
 				where: {

@@ -14,7 +14,7 @@
 		}
 	}
 
-	let itemId: string = 'email';
+	export let itemId: string = 'email';
 	export let name: string = 'user';
 	export let id: string = 'user';
 	export let justValue: any;

@@ -4,7 +4,7 @@
 
 	let items: any;
 
-	let itemId: string = 'id';
+	export let itemId: string = 'id';
 	export let justValue: any;
 	export let value: any = [];
 	export let multiple: boolean = false;

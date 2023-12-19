@@ -25,7 +25,8 @@ export const load: PageServerLoad = async ({ params }) => {
 		});
 
 		return {
-			requests
+			requests,
+			request: null
 		};
 	} else if (!isNaN(Number(id))) {
 		const request = await prisma.request.findUnique({
