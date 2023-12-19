@@ -1,0 +1,31 @@
+name: hotspots deployment
+run-name: ${{ github.actor }} is deploying hotspots
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ main ]
+
+env:
+  GITHUB_WORKSPACE: /www/hotspots.kpl.gov
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: Clone kalamazoopubliclibrary/hotspots PRIVATE repository
+        run: |
+          rm -rf code/
+          git clone https://${{ secrets.ACCESS_TOKEN }}@github.com/kalamazoopubliclibrary/hotspots.git code
+          cp .env code/
+        working-directory: /www/hotspots.kpl.gov
+
+      - name: stop running containers
+        run: docker-compose down
+        working-directory: /www/hotspots.kpl.gov/code
+
+      - name: Run all containers
+        run: docker-compose up --build -d
+        working-directory: /www/hotspots.kpl.gov/code

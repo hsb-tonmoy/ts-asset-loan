@@ -1,10 +1,12 @@
 {
-	"name": "ts-asset-loan",
+	"name": "kpl-erf",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
+		"migrate": "npx prisma migrate deploy && npx prisma generate",
+		"start": "npm run migrate && node index.js",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -12,7 +14,7 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"@prisma/client": "^5.7.0",
+		"@prisma/client": "^5.7.1",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.20.4",
 		"@types/node": "^20.9.2",
@@ -26,7 +28,7 @@
 		"postcss-load-config": "^4.0.1",
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.10.1",
-		"prisma": "^5.7.0",
+		"prisma": "^5.7.1",
 		"svelte": "^4.0.5",
 		"svelte-check": "^3.4.3",
 		"svelte-headless-table": "^0.17.7",
