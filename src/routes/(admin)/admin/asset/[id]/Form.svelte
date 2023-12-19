@@ -47,12 +47,12 @@
 		uploadedImage = URL.createObjectURL(image);
 	};
 
+	if (edit) uploadedImage = convertToImageURL(data.asset?.image);
+
 	$: form.update((old) => ({
 		...old,
 		image: uploadedImage
 	}));
-
-	if (edit) uploadedImage = convertToImageURL(data.asset?.image);
 </script>
 
 <form

@@ -98,6 +98,8 @@ export const actions: Actions = {
 
 		if (!form.valid) return fail(400, { form });
 
+		console.log(form.data);
+
 		try {
 			const existingAsset = await prisma.asset.findUnique({
 				where: {
@@ -108,20 +110,12 @@ export const actions: Actions = {
 			let filePath = existingAsset?.image;
 
 			const newImage = formData.get('image');
-			if (newImage instanceof Blob) {
-				if (newImage.size > 0) {
-					// A new image has been provided
-					if (existingAsset?.image) {
-						await deleteFile(existingAsset.image);
-					}
-					filePath = await saveFile(formData);
-				} else {
-					// The user wants to delete the image
-					if (existingAsset?.image) {
-						await deleteFile(existingAsset.image);
-					}
-					filePath = null;
+			if (newImage instanceof Blob && newImage.size > 0) {
+				// A new image has been provided
+				if (existingAsset?.image) {
+					await deleteFile(existingAsset.image);
 				}
+				filePath = await saveFile(formData);
 			}
 
 			await prisma.asset.update({
@@ -205,7 +199,7 @@ async function saveFile(formData: FormData) {
 	const filePath = path.join(
 		'static',
 		'uploads',
-		'categories',
+		'assets',
 		`${crypto.randomUUID()}.${fileExtension}`
 	);
 
@@ -225,13 +219,13 @@ async function saveFile(formData: FormData) {
 }
 
 async function deleteFile(filePath: string) {
-	const basePath = path.join('static', 'uploads', 'categories');
+	const basePath = path.join('static', 'uploads', 'assets');
 
 	const relativeFilePath = path.relative(basePath, filePath);
 	const resolvedPath = path.resolve(basePath, relativeFilePath);
 
 	if (!resolvedPath.startsWith(path.resolve(basePath))) {
-		throw new Error('Invalid file path');
+		return;
 	}
 
 	try {

@@ -3,7 +3,7 @@
 	import type { Asset, AssetCategory, Request } from '@prisma/client';
 	import Assets from '$lib/components/AsyncSelects/Assets.svelte';
 	import { convertToImageURL } from '$lib/utils';
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { toast } from 'svoast';
 	import { X } from 'lucide-svelte';
 
@@ -14,7 +14,7 @@
 
 	export let request: RequestWithAssets;
 
-	let hasAssets = request.assets.length > 0;
+	$: hasAssets = request.assets.length > 0;
 
 	$: if (hasAssets && request.assets.length > 0) {
 		// Map request.assets to data
@@ -32,6 +32,8 @@
 		data = [...data, selected];
 		selected = null;
 	}
+
+	$: console.log(data);
 
 	let submitting: boolean = false;
 
@@ -56,6 +58,7 @@
 			toast.success(`Assets successfully checked out!`, {
 				closable: true
 			});
+			invalidateAll();
 			goto(`/admin/request/list`);
 		}
 	};

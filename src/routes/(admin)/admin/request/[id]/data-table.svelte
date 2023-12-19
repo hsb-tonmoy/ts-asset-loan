@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
-	import { Plus, Trash2, MoveUp, MoveDown } from 'lucide-svelte';
+	import { Trash2, MoveUp, MoveDown } from 'lucide-svelte';
 	import {
 		createSvelteTable,
 		flexRender,
@@ -13,7 +13,6 @@
 
 	import Label from '$lib/components/ui/label/label.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
-	import Button from '$lib/components/ui/button/button.svelte';
 
 	import RequestedAssets from './requested-assets.svelte';
 	import RowActions from './row-actions.svelte';
@@ -174,8 +173,6 @@
 	};
 
 	const table = createSvelteTable(options);
-
-	$: console.log(data);
 </script>
 
 <div class="flex flex-col bg-white dark:bg-[#18181C] box-border p-4 w-full">

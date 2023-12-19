@@ -94,20 +94,12 @@ export const actions: Actions = {
 			let filePath = existingCategory?.image;
 
 			const newImage = formData.get('image');
-			if (newImage instanceof Blob) {
-				if (newImage.size > 0) {
-					// A new image has been provided
-					if (existingCategory?.image) {
-						await deleteFile(existingCategory.image);
-					}
-					filePath = await saveFile(formData);
-				} else {
-					// The user wants to delete the image
-					if (existingCategory?.image) {
-						await deleteFile(existingCategory.image);
-					}
-					filePath = null;
+			if (newImage instanceof Blob && newImage.size > 0) {
+				// A new image has been provided
+				if (existingCategory?.image) {
+					await deleteFile(existingCategory.image);
 				}
+				filePath = await saveFile(formData);
 			}
 
 			await prisma.assetCategory.update({
@@ -115,9 +107,8 @@ export const actions: Actions = {
 					id: Number(id)
 				},
 				data: {
-					name: form.data.name,
-					image: filePath,
-					description: form.data.description
+					...form.data,
+					image: filePath
 				}
 			});
 		} catch (err) {
